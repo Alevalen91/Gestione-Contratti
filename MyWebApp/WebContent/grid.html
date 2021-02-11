@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Uso di una jqxGrid con JSP</title>
+    <link type="text/css" rel="Stylesheet" href="jqwidgets/styles/jqx.base.css" />
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="scripts/demos.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var source = {
+                datatype: "json",
+                datafields: [{
+                    name: 'id',
+                    type: 'int'
+                }, {
+                    name: 'descrizione',
+                    type: 'string'
+                }],
+                id: 'id',
+                url: 'getRuolo.jsp',
+                async: true
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+            $("#jqxgrid").jqxGrid({
+                width: 300,
+                autoheight: true,
+                source: dataAdapter,
+                columns: [{
+                    text: 'Id',
+                    datafield: 'id',
+                    width: 100
+                }, {
+                    text: 'Descrizione',
+                    datafield: 'descrizione',
+                    width: 200
+                }]
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="jqxgrid"></div>
+</body>
+</html>
