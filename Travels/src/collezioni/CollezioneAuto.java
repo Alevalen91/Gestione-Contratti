@@ -19,11 +19,10 @@ public class CollezioneAuto {
 		map.put("0key", new Date());
 		System.out.println(map);
 		System.out.println(map.get("2key"));
-
+		
 		// Uso di TreeMap: Map ordinato (elementi NON duplicati)
 		TreeMap sortedMap = new TreeMap(map);
 		System.out.println(sortedMap);
-
 		
 		// Set non ordinato con elementi NON duplicati
 		HashSet<String> set = new HashSet<String>();
