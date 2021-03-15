@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>In this example is demonstrated how to populate a jqxChart with data from a MySQL Database.</title>
+    <link type="text/css" rel="Stylesheet" href="jqwidgets/styles/jqx.base.css" />
+    <style type="text/css">
+        .labels {
+            font-size: smaller;
+        }
+    </style>
+     <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+     <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+       <script type="text/javascript" src="jqwidgets/jqxprogressbar.js"></script>
+  
+    
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdraw.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxchart.core.js"></script>
+    <script type="text/javascript">
+        $(document).ready(
+            function () {
+                var source = {
+                    datatype: "json",
+                    datafields: [{
+                        name: 'Agente',
+                        type: 'string'
+                    }, {
+                        name: 'Punteggio',
+                        type: 'int'
+                    }],
+                    url: 'http://localhost:8080/AlessioGestionale/Analisi',
+                    async: true
+                };
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                var settings = {
+                    title: "Punteggio agenti",
+                    description: "Somma punti contratti",
+                    padding: {
+                        left: 5,
+                        top: 5,
+                        right: 15,
+                        bottom: 5
+                    },
+                    titlePadding: {
+                        left: 90,
+                        top: 0,
+                        right: 0,
+                        bottom: 10
+                    },
+                    source: dataAdapter,
+                    xAxis: {
+                        dataField: 'Agente',
+                        displayText: 'Agente',
+                        gridLines: {
+                            visible: true
+                        },
+                        valuesOnTicks: false,
+                        type: 'basic',
+                        labels: {
+                            class: 'labels',
+                            angle: 90,
+                            formatFunction: function (value) {
+                                return value.replace(/\?/g, '');
+                            }
+                        },
+                        flip: false
+                    },
+                    colorScheme: 'scheme01',
+                    seriesGroups: [{
+                        type: 'column',
+                        columnsGapPercent: 30,
+                        seriesGapPercent: 0,
+                        orientation: 'horizontal',
+                        valueAxis: {
+                            minValue: 0,
+                            unitInterval: 1,
+                            description: 'Punteggio',
+                            flip: true
+                        },
+                        series: [{
+                            dataField: 'Punteggio',
+                            displayText: 'Punteggio'
+                        }]
+                    }]
+                };
+                $('#chartContainer').jqxChart(settings);
+            });
+    </script>
+    <script>
+    $.ajax({ 
+        type: 'GET', 
+        url: 'http://localhost:8080/AlessioGestionale/Analisi', 
+        data: { get_param: 'Punteggio' }, 
+        dataType: 'json',
+        success: function (data) {
+        	var start = 0;
+        	var obj = data;
+        	for (var x in obj){
+        		start = start + obj[x].Punteggio;
+        		
+            	
+        	}
+        
+        	console.log(start/document.getElementById("uniqueID").value *100 );
+        }
+    });
+    
+    </script>
+     <script type="text/javascript">
+   	var start = 0;
+   	
+     
+        $(document).ready(function () {
+        	var nameValue = document.getElementById("uniqueID").value;
+
+        	$.ajax({ 
+                type: 'GET', 
+                url: 'http://localhost:8080/AlessioGestionale/Analisi', 
+                data: { get_param: 'Punteggio' }, 
+                dataType: 'json',
+                success: function (data) {
+                
+                	var obj = data;
+                	for (var x in obj){
+                		start = start + obj[x].Punteggio;
+                		x++;
+                
+                		
+                    	
+                	}
+                
+                	console.log(start);
+                	console.log(nameValue);
+                }
+            });
+        	
+            
+          console.log(start);
+            // Create vertical jqxProgressBar.
+            $("#jqxprogressbar").jqxProgressBar({ orientation: 'vertical', width: 25, height: 250, value: start });
+            $('#jqxprogressbar').bind('valuechanged', function (event) {
+                alert("Value: " + event.currentValue);
+            });
+            // Update ProgressBars.
+            $('#button').click(function () {
+                $("#jqxprogressbar").jqxProgressBar({ value: ((start/document.getElementById("uniqueID").value)) * 100  });
+                console.log(start);
+                document.getElementById("resultpercentage").innerHTML = "Punteggio: " + start + "<br> Target: " + document.getElementById("uniqueID").value + " <br>Percentuale completamento: " + ((start/document.getElementById("uniqueID").value) * 100).toFixed([2]) + "%" ; 
+                console.log(document.getElementById("uniqueID").value);
+                console.log((start/document.getElementById("uniqueID").value) );
+            });
+        });
+    </script>
+    
+    <script>
+    
+    $('input').click(function () {
+       
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        $('#jqxChart').jqxChart({ source: dataAdapter });
+    });
+
+    
+    </script>
+    
+    <script> 
+    
+    var btn = sampleForm.jqxForm('getComponentByName', 'submitButton');
+    btn.on('click', function () {
+    	// function: submit
+    	// arg1: url
+    	// arg2, optional: target, default is _blank
+    	// arg3, optional: submit method - GET or POST, default is POST
+    	sampleForm.jqxForm('submit', "Analisi", "_blank", 'Get');
+    });
+    
+    </script>
+    
+    <style>
+    
+    #resultpercentage {
+    
+    display:block;
+    
+    margin: 50px;
+    
+    }
+    
+    </style>
+</head>
+<body>
+
+<div> 
+	<form method="GET" action="Analisi"  id="form">
+	
+	 <input type="text" name="quarter" id="quarter" /> 
+	 	<input class= "submit" type = "submit" value = "Inserisci"> 
+	</form>
+</div>
+    <div id='chartContainer' style="width: 860px; height: 600px; margin-bottom: 25px;"></div>
+    <div><h3> Completamento KPI</h3>
+    <span> <h4 id = "resultpercentage"></h4></span>
+    
+    </div> 
+     <div id='jqxprogressbar'>  
+        </div>
+        <br />
+        <div>
+        <input id='button' type='button' value='Update' style='padding: 3px; margin-top: 5px;' />
+        <input type="number" name="name" id="uniqueID" value="value" /> 
+       
+        </div>
+</body>
+</html>

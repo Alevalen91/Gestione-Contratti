@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Uso di una jqxGrid con JSP</title>
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.light.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.energyblue.css" type="text/css" />
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="scripts/demos.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var source = {
+                datatype: "json",
+                datafields: [{
+                    name: 'Account',
+                    type: 'string'
+                }, {
+                    name: 'Nome',
+                    type: 'string'
+                },
+                
+                {
+                	name: 'Cognome',
+                	type : 'string'
+                },
+                
+                {
+                	name: 'Tipologia',
+                	type: 'string'
+                },
+                
+                {
+                	name: 'Agente',
+                	type: 'string'
+                },
+                
+                {
+                	name: 'Codice_agente',
+                	type: 'string'
+                },
+                
+                {
+                	name: 'Quarter',
+                	type: 'string'
+                }],
+                cache: false,
+                
+                id: 'Account',
+                url: 'http://localhost:8080/AlessioGestionale/ContrattiQuery',
+                filter: function() {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                },
+                
+                sort: function() {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
+                },
+                
+                
+               async: true,
+                
+                beforeprocessing: function(data) {
+                    if (data != null && data.length > 0) {
+                    	 source.totalrecords = data[0].totalRecords;
+                    }
+                }
+               
+            };
+            
+            var filterChanged = false;
+            var dataadapter = new $.jqx.dataAdapter(source , {
+				
+				// remove the comment to debug
+              //  formatData: function(data) {
+				//	alert(JSON.stringify(data));
+					//alert(data);
+				//	console.log (data);
+					
+                   // return data;
+                //},
+                downloadComplete: function(data, status, xhr) {
+                	  if (!source.totalRecords) {
+                          source.totalRecords = data.length;
+                    }
+                },
+                loadError: function(xhr, status, error) {
+                    throw new Error(error);
+                }
+            });
+            
+            
+            
+
+            $("#jqxgrid").jqxGrid({
+                width: 1000,
+             
+                source: dataadapter,
+                filterable: true,
+                sortable: true,
+              	autoheight: true,
+              	theme: 'energyblue',
+                pageable: true,
+                pagesize: 3,
+                pagesizeoptions: ['3', '4', '5'],
+                virtualmode: true,
+                rendergridrows: function(obj) {
+                    return obj.data;
+                },
+            
+              
+            
+                columns: [{
+                    text: 'Account',
+                    datafield: 'Account',
+                    width: 100
+                }, {
+                    text: 'Nome',
+                    datafield: 'Nome',
+                    width: 200
+                },
+                {
+                	text: 'Cognome',
+                	datafield: 'Cognome',
+                	width:  200
+                },
+                
+                {
+                	text: 'Tipologia',
+                	datafield: 'Tipologia',
+                	width:  200
+                },
+                
+                {
+                	text: 'Agente',
+                	datafield: 'Agente',
+                	width:  200
+                },
+                
+                {
+                	text: 'Codice_Agente',
+                	datafield: 'Codice_agente',
+                	width:  200
+                },
+                
+                {
+                	text: 'Quarter',
+                	datafield: 'Quarter',
+                	width:  200
+                }]
+            });
+        });
+        
+        
+        
+        
+        // Script button delete 
+        
+        
+        $(document).ready(function() {
+// crating new click event for save button
+$("#delete").click(function() {
+var account = $("#account_del").val();
+$.ajax({
+url: "http://localhost:8080/AlessioGestionale/ContrattiQuery",
+type: "DELETE",
+data: {
+Account : account,
+},
+success : function(data){
+	console.log(account);
+alert(data); // alerts the response from jsp
+location.reload();
+}
+});
+});
+});
+        
+        
+    </script>
+    
+    <style>
+    .submit::hover{
+    opacity: 0.2;
+    
+    }
+    .submit{
+  	
+    margin-top: 15px;
+
+    
+    
+    }
+    
+    h5{
+    margin-top: -10px;
+    }
+    .elimination{
+    
+    margin-top: 50px;
+    margin-bottom: 30px;
+    
+    }
+    
+    div {
+    align-items: center;
+    }
+    
+    form {
+    align-items : center;
+    
+    }
+    input::hover{
+    opacity: 0.2;
+    }
+    
+    input::hover{
+    
+   
+    
+    }
+   
+    .input{
+	
+    margin-bottom: 5px;
+    display : inline-block;
+    
+    }
+    
+   body  {
+background-color: #DAE7FE;
+}
+    </style>
+</head>
+<body class = "default">
+<div>
+<h3> Inserisci/ Aggiorna record</h3>
+<h5> Per aggiornare un record inserisci un account esistente</h5>
+	<form method="post" action="ContrattiQuery"  id="form">
+	
+	<div >
+	<div class = "input">
+	<label for="fname">Account</label><br>
+  		<input type="text" id="account_par" name="account_par" required><br>
+  	</div>
+  		
+  		
+  	<div class = "input">
+	<label for="fname">Nome</label><br>
+  		<input type="text" id="nome_par" name="nome_par" required><br>
+  	
+ 	</div>
+  
+  		
+  		<div class = "input">
+  		 <label for="fname">Cognome</label><br>
+  		<input type="text" id="cognome_par" name="cognome_par" required><br>
+		</div>
+
+  		
+  	
+  		
+  		</div>
+  		
+  		
+  		<div>
+  
+  		
+  		
+  		<div class = "input">
+  		
+  		<label for="fname">Codice Agente</label><br>
+  		<input type="text" id="codice_agente_par" name="codice_agente_par" required><br>
+  		
+  		</div>
+  		
+		</div>
+  	
+  		
+  		<div class = "select">
+	 <label for="Agente">Selezione Agente</label>
+  <select name="Agente" id="Agente">
+    <option value="Agente1">Agente1</option>
+    <option value="Agente2">Agente2</option>
+    <option value="Agente3">Agente3</option>
+    <option value="Agente4">Agente4</option>
+  </select>
+  <br><br>
+  	</div>
+  	
+  	<div class = "select">
+   <label for="Tipologia">Selezione Contratto</label>
+  <select name="Tipologia" id="Tipologia">
+    <option value="Contratto1">Contratto1</option>
+    <option value="Contratto2">Contratto2</option>
+    <option value="Contratto3">Contratto3</option>
+    <option value="Contratto4">Contratto4</option>
+  </select>
+  	</div>
+	<div class = "submit">
+
+  	<input class= "submit" type = "submit" value = "Inserisci"> 
+  	</div>
+  	</div>
+ 
+	
+	</form>
+
+	<div class = "elimination"> 
+	<h3> Eliminazione record</h3>
+	<form method="post" action="ContrattiQuery"  id="form_delete">
+	<label for="account_del">Account</label><br>
+	 <input type = "text" id = "account_del" name= "account_del"  required>
+	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
+	 </form>
+	</div>
+	
+	
+    <div id="jqxgrid"></div>
+    
+    <div> <a href="Analisi.html" target="_blank"> <h4> Vai all'analisi</h4></a></div>
+</body>
+</html>
