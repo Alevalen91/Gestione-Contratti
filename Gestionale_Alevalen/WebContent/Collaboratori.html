@@ -1,0 +1,140 @@
+<html lang="it">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 	<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+   
+   
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    
+    <title>Promozioni</title>
+    <script> 
+    
+    
+    $.ajax({ 
+        type: 'GET', 
+        url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+         
+        dataType: 'html',
+        success: function (data) {
+        	obj = JSON.parse(data);
+        	var select = "";
+        	for (var x in obj){
+        		
+        		
+        		 select += '<option value = ' + '"'+ obj[x].Promozione +'" >'+ obj[x].Promozione + " </option>";
+        		 console.log(select);
+        		x++;
+        		
+        	
+        	}
+        	document.getElementById("promo").innerHTML = select;
+        	
+
+    	}
+    
+    	
+});
+
+    
+    </script>
+    
+    <script>
+    $(document).ready(function () { 
+    $('#button').click(function () {
+    	var val = document.getElementById("promo").value;
+    	
+    	
+    	$.ajax({ 
+            type: 'GET', 
+            url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+             data: {Promozione: val},
+            dataType: 'html',
+            success: function (data) {
+            	console.log(data);
+            
+            	obj = JSON.parse(data);
+            	console.log(obj);
+            	promozione = obj;
+            	console.log(promozione);
+            	document.getElementById("show").innerHTML = "<h3>" + obj[0].Promozione + "</h3>" + "<br> <p>" + obj[0].Descrizione + "</p>";
+    }
+             
+    	});
+    });
+    });
+    
+    </script>
+    <style>
+    div {
+    
+    margin-left:20px;
+    margin-top: 30px;
+    
+    }
+    </style>
+    <link rel = "stylesheet" href="css/Index.css" >
+    <link rel = "stylesheet" href="css/footer.css" >
+    <link rel = "stylesheet" href="css/header.css" >
+    
+  </head>
+  
+  
+  
+  
+  
+  <body>
+
+
+	<nav class="navbar navbar-light  bg-custom">
+ 		 <a class="navbar-brand" href="Collaboratori.html">
+   			 <img src="images/ilmarlogo.png" width="40" height="40" class="d-inline-block align-bottom" alt="">
+				Promozioni Ilmar
+ 		 </a>
+	</nav>
+		<div class = "col-6">  <h3> Scegli la promozione da consultare</h3>
+		<h6> Insieme alla descrizione della promo, troverai l'ultimo aggiornamento.  <br> Se hai dubbi contattaci in negozio.</h6></div>
+	
+	
+	<div>
+	<form>
+	
+<label for="promo" style = "margin-bottom: -40px; margin-left:20px; "> <strong> Consulta promozione:</strong></label>
+<div>
+<select id="promo">
+  
+</select>
+ <button type="button" id= "button" name = "button">Info promo</button>
+	</form>
+	</div>
+	</div>
+	
+ <div id= "show"> 
+ 
+ 
+ 
+ </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+   <footer id= "footer" style = "height: 190px;">
+
+      <div class = "row justify-content-center">
+        <div id = "contatti" class = "col col-md-4 ">
+          <h5 class="contatti" > Contatti </h5>
+          <ul>
+          <li class = "mail"> <a href = "mailto: abc@example.com">ilmar@ilmar.it</a></li>
+            <li class = "phone"> 3482943264</li>
+            </ul>
+        </div>
+
+    
+          
+        </div>
+
+
+    </footer>
+
+</body>
+</html>

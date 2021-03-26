@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Gestione promo</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    	
+    	  <link rel = "stylesheet" href="css/footer.css" >
+    	   <link rel = "stylesheet" href="css/Index.css" >
+    	   <link rel = "stylesheet" href="css/header.css" >
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.light.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.energyblue.css" type="text/css" />
+    <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="scripts/demos.js"></script>
+   	<script>
+    $.ajax({ 
+        type: 'GET', 
+        url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+         
+        dataType: 'html',
+        success: function (data) {
+        	obj = JSON.parse(data);
+        	var parag = "";
+        	for (var x in obj){
+        		console.log(parag);
+        		
+        		 parag += "<li> " + obj[x].Promozione + " <br </li>";
+        	
+        		x++;
+        		
+        	
+        	}
+        	
+        		document.getElementById("list").innerHTML = parag;
+        
+        	
+            	
+        	}
+        
+        	
+    });
+
+   	
+   	</script>
+    
+    <style>
+  
+    .submit{
+  	
+    margin-top: 15px;
+
+    
+    
+    }
+    
+    h5{
+    margin-top: -10px;
+    }
+    .elimination{
+    
+    margin-top: 50px;
+    margin-bottom: 30px;
+    
+    }
+    
+    div {
+    margin-left: 20px;
+    align-items: center;
+    }
+    
+    form {
+    align-items : center;
+    
+    }
+  
+    
+   
+    .input{
+	
+    margin-bottom: 5px;
+    display : inline-block;
+    
+    }
+    
+
+    </style>
+    
+    
+</head>
+<body class = "default">
+
+<nav class="navbar navbar-light  bg-custom">
+  <a class="navbar-brand" href="Index.html">
+    <img src="images/ilmarlogo.png" width="40" height="40" class="d-inline-block align-bottom" alt="">
+Gestione Ilmar
+  </a>
+</nav>
+<div class = "contaneir">
+<div class = "row">
+<div class="mb-3 col-4">
+<h3> Inserisci/ Aggiorna Promo</h3>
+<form method="post" action="Promozioni"  id="form">
+
+  <label for="Promozione" class="form-label">Promozione</label>
+  <input type="text" class="form-control form-control-sm input" id="Promozione" name ="Promozione" placeholder="nome promo" required>
+</div>
+</div>
+<div class = "row">
+<div class="mb-3 col-6">
+  <label for="Descrizione" class="form-label">Example textarea</label>
+  <textarea class="form-control input" id="Descrizione" name = "Descrizione" rows="10"  placeholder= "Inserisci qui la descrizione della promo" required></textarea>
+    	<input class= "submit" type = "submit" value = "Inserisci"> 
+  
+  </form>
+</div>
+</div>
+
+
+<div>
+
+
+
+
+  
+  	</div>
+  	
+ 
+	
+	</form>
+	
+	
+
+	<div class = "elimination"> 
+	<h3> Eliminazione Promo</h3>
+	<form method="post" action="Promozioni"  id="form_delete">
+	<label for="promo_del">Promozione</label><br>
+	 <input type = "text" id = "promo_del" name= "promo_del"  required>
+	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
+	 </form>
+	</div>
+	<div> <h3> Elenco promo in archivio</h3> </div>
+	<div id = "list" name = "list">
+	
+	
+	</div>
+	
+	<div>
+	 <a href = "Collaboratori.html">
+	<h3>
+	Vai alla pagina Collaboratori
+	</h3>
+	</a>
+	</div>
+	</div>
+	
+	
+	
+</body>
+</html>

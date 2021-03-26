@@ -1,0 +1,89 @@
+
+
+	footer {
+
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  font-family: "Copperplate", Papyrus, fantasy;
+  background-color: #c2d3f2;
+  border-top: 1px solid;
+  margin-top:200px;
+  position: relative;
+
+}
+
+form{
+  margin-top: 20px;
+
+
+}
+
+#form_button{
+  display: block;
+  margin-left: 230px;
+  margin-top: 20px;
+
+}
+
+input{
+
+  margin:10px;
+  background-color: #c2d3f2;
+
+
+}
+input:focus {
+background-color: white;
+
+}
+ul{
+  margin-top: 30px;
+  margin-left: 40px;
+
+  text-align: left;
+}
+li::before{
+
+
+display: inline-table;
+}
+li.mail {
+
+  line-height: 60px;
+  background-image: url('../images/mail.png');
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding-left: 50px;
+  list-style: none;
+
+  list-style-position: inside;
+}
+li.phone{
+  line-height: 60px;
+
+  background-image: url('../images/cell.png');
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding-left: 50px;
+  list-style: none;
+  list-style-position: inside;
+}
+.contatti{
+  border-bottom: 1px solid;
+
+
+}
+
+@media screen and (max-width: 800px) {
+
+#nome_sito{
+display:none;
+}}
+
+#nome_sito{
+  margin-top: 170px;
+}
+.newsletter{
+  border-bottom: 1px solid;
+}

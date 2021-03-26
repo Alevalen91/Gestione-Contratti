@@ -31,7 +31,7 @@ import com.mysql.cj.xdevapi.Statement;
 
 
 @WebServlet("/ContrattiQuery")
-public class ContrattiQuery extends HttpServlet {
+public class Fastweb_inserimenti extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private Connection conn;
@@ -232,22 +232,19 @@ public class ContrattiQuery extends HttpServlet {
 		
 		Integer start = pagesize * pagenum;
 		
-		// database connection
-		
-		// "jdbc:mysql://localhost:3306/northwind" - the database url of the form jdbc:subprotocol:subname
-		
+	
 		try {
 		
 		getConn();
 		// retrieve necessary records from database
 		stm = conn.createStatement();
-		ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM contratti"	+ where);
+		ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM Fastweb"	+ where);
 		String totalRecords = "";
 		while (totalContratti.next()) {
 			totalRecords = totalContratti.getString("Count");
 		}
 		totalContratti.close();
-		String sql = "SELECT Account, Nome, Cognome, Tipologia, Agente, Codice_agente, Quarter, Telefono, Indirizzo, CAP, Data_inserimento FROM contratti " + where + " " + orderby + " LIMIT ?,?";
+		String sql = "SELECT Account, Nome, Cognome, Contratto, Indirizzo, CAP, Telefono, Giorno, Agente, Codice_agente FROM Fastweb " + where + " " + orderby + " LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, start);
 		stmt.setInt(2, pagesize);
@@ -265,14 +262,13 @@ public class ContrattiQuery extends HttpServlet {
 			 currentRecord.put("Account",	contratti.getObject("Account"));
 			currentRecord.put("Nome", contratti.getObject("Nome"));
 			currentRecord.put("Cognome", contratti.getObject("Cognome"));
-			currentRecord.put("Tipologia", contratti.getObject("Tipologia"));
-			currentRecord.put("Agente", contratti.getObject("Agente"));
-			currentRecord.put("Codice_agente", contratti.getObject("Codice_agente"));
-			currentRecord.put("Quarter", contratti.getObject("Quarter"));
-			currentRecord.put("Telefono", contratti.getObject("Telefono"));
+			currentRecord.put("Contratto", contratti.getObject("Contratto"));
 			currentRecord.put("Indirizzo", contratti.getObject("Indirizzo"));
-			currentRecord.put("Cap", contratti.getObject("Cap"));
-			currentRecord.put("Data", contratti.getObject("Data_inserimento"));
+			currentRecord.put("CAP", contratti.getObject("CAP"));
+			currentRecord.put("Telefono", contratti.getObject("Telefono"));
+			currentRecord.put("Giorno", contratti.getObject("Giorno"));
+			currentRecord.put("Agente", contratti.getObject("Agente"));
+			currentRecord.put("Codice Agente", contratti.getObject("Codice_agente"));
 			if (totalRecordsAdded == false) {
 				// add the number of filtered records to the first record for client-side use
 				currentRecord.put("totalRecords", (totalRecords));

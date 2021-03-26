@@ -19,6 +19,19 @@
     <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
     <script type="text/javascript" src="scripts/demos.js"></script>
+   <!-- Script sorgente grid -->
+   
+   <style>
+   div.border {
+   
+   border-bottom: 1px solid;
+   border-color: #c2d3f2;
+   margin: 20px;
+   
+   }
+   
+   </style>
+   
     <script type="text/javascript">
         $(document).ready(function () {
             var source = {
@@ -54,11 +67,33 @@
                 {
                 	name: 'Quarter',
                 	type: 'string'
-                }],
+                },
+                
+                {
+                	name: 'Telefono',
+                	type: 'int'
+                },
+                
+                {
+                	name: 'Indirizzo',
+                	type: 'string'
+                },
+                
+                {
+                	name: 'CAP',
+                	type: 'int'
+                },
+                
+                {
+                	name: 'Data',
+                	type: 'string'
+                },
+                
+                ],
                 cache: false,
                 
                 id: 'Account',
-                url: 'http://localhost:8080/AlessioGestionale/ContrattiQuery',
+                url: 'http://localhost:8080/Gestionale_Alevalen/ContrattiQuery',
                 filter: function() {
                     // update the grid and send a request to the server.
                     $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
@@ -159,7 +194,34 @@
                 	text: 'Quarter',
                 	datafield: 'Quarter',
                 	width:  200
-                }]
+                },
+                
+                {
+                    text: 'Telefono',
+                    datafield: 'Telefono',
+                    width: 100
+                },
+                
+                {
+                    text: 'Indirizzo',
+                    datafield: 'Indirizzo',
+                    width: 300
+                },
+                
+                {
+                    text: 'CAP',
+                    datafield: 'CAP',
+                    width: 50
+                },
+                
+                {
+                    text: 'Data',
+                    datafield: 'Data',
+                    width: 80
+                },
+                
+                
+                ]
             });
         });
         
@@ -174,7 +236,7 @@
 $("#delete").click(function() {
 var account = $("#account_del").val();
 $.ajax({
-url: "http://localhost:8080/AlessioGestionale/ContrattiQuery",
+url: "http://localhost:8080/Gestionale_Alevalen/ContrattiQuery",
 type: "DELETE",
 data: {
 Account : account,
@@ -189,6 +251,37 @@ location.reload();
 });
         
         
+    </script>
+    
+    <!-- Script poplamento select agenti form inserimento -->
+    <script>
+    
+    $.ajax({ 
+        type: 'GET', 
+        url: 'http://localhost:8080/Gestionale_Alevalen/ContrattiQuery', 
+        dataType: 'json',
+        success: function (data) {
+        	obj = (data);
+        	var select = "";
+        	for (var x in obj){
+        		
+        		
+        		 select += '<option value = ' + '"'+ obj[x].Agente +'" >'+ obj[x].Agente + " </option>";
+        		 console.log(select);
+        		x++;
+        		
+        	
+        	}
+        	document.getElementById("Agente").innerHTML = select;
+        	document.getElementById("agente_del").innerHTML = select;
+        	
+
+    	}
+    
+    	
+});
+
+    
     </script>
     
     <style>
@@ -226,14 +319,10 @@ location.reload();
     opacity: 0.2;
     }
     
-    input::hover{
-    
-   
-    
-    }
-   
+  
+      
     .input{
-	
+	background-color: #DAE7FE;
     margin-bottom: 5px;
     display : inline-block;
     
@@ -243,17 +332,32 @@ location.reload();
 background-color: #DAE7FE;
 }
     </style>
+    
+     <link rel = "stylesheet" href="css/Index.css" >
+    <link rel = "stylesheet" href="css/footer.css" >
+    <link rel = "stylesheet" href="css/header.css" >
 </head>
 <body class = "default">
+
+<nav class="navbar navbar-light  bg-custom">
+  <a class="navbar-brand" href="Index.html">
+    <img src="images/ilmarlogo.png" width="40" height="40" class="d-inline-block align-bottom" alt="">
+Gestione Ilmar
+  </a>
+</nav>
+
 <div>
 <h3> Inserisci/ Aggiorna record</h3>
 <h5> Per aggiornare un record inserisci un account esistente</h5>
+
+		<!-- Form inserimento nuovo record contratto  -->
+		
 	<form method="post" action="ContrattiQuery"  id="form">
 	
-	<div >
+	
 	<div class = "input">
 	<label for="fname">Account</label><br>
-  		<input type="text" id="account_par" name="account_par" required><br>
+  		<input type="text" id="account_par" name="account_par" required maxlength = "8"><br>
   	</div>
   		
   		
@@ -268,39 +372,47 @@ background-color: #DAE7FE;
   		 <label for="fname">Cognome</label><br>
   		<input type="text" id="cognome_par" name="cognome_par" required><br>
 		</div>
-
-  		
-  	
-  		
-  		</div>
-  		
-  		
-  		<div>
-  
-  		
-  		
+	
+		<br>
+		
+		<div class = "input">
+  		 <label for="fname">Telefono</label><br>
+  		<input type="text" id="Telefono" name="Telefono" maxlength="10" required><br>
+		</div>
+	 		
   		<div class = "input">
   		
   		<label for="fname">Codice Agente</label><br>
-  		<input type="text" id="codice_agente_par" name="codice_agente_par" required><br>
+  		<input type="text" id="codice_agente_par" name="codice_agente_par" ><br>
   		
   		</div>
   		
+		<div class = "input">
+  		 <label for="fname">Indirizzo</label><br>
+  		<input type="text" id="Indirizzo" name="Indirizzo" required><br>
 		</div>
-  	
+		
+		<div class = "input">
+  		 <label for="fname">Cap</label><br>
+  		<input type="text" id="Cap" name="Cap" maxlength="5" required><br>
+		</div>
+		<br>
+		
+		
+		<div class = "input">
+  		 <label for="fname">Data</label><br>
+  		<input type="date" id="Data" name="Data" required ><br>
+		</div>
   		
-  		<div class = "select">
+  		<div class = "input">
 	 <label for="Agente">Selezione Agente</label>
   <select name="Agente" id="Agente">
-    <option value="Agente1">Agente1</option>
-    <option value="Agente2">Agente2</option>
-    <option value="Agente3">Agente3</option>
-    <option value="Agente4">Agente4</option>
+    
   </select>
-  <br><br>
+  
   	</div>
   	
-  	<div class = "select">
+  	<div class = "input">
    <label for="Tipologia">Selezione Contratto</label>
   <select name="Tipologia" id="Tipologia">
     <option value="Contratto1">Contratto1</option>
@@ -310,13 +422,16 @@ background-color: #DAE7FE;
   </select>
   	</div>
 	<div class = "submit">
-
+	  <input type="reset">
   	<input class= "submit" type = "submit" value = "Inserisci"> 
   	</div>
   	</div>
  
 	
 	</form>
+	<div class = "border">
+	</div>
+	<!-- Form eliminazione record contratto  -->
 
 	<div class = "elimination"> 
 	<h3> Eliminazione record</h3>
@@ -327,9 +442,54 @@ background-color: #DAE7FE;
 	 </form>
 	</div>
 	
+	</form>
+	<div class = "border">
+	</div>
 	
+	<!-- Form inserimento nuovo agente  -->
+	<h3> Inserimento nuovo Agente</h3>
+	<form method="post" action="GestioneAgenti"  id="form">
+	
+	<div >
+	<div class = "input">
+	<label for="fname">Agente</label><br>
+  		<input type="text" id="agente_creato" name="agente_creato" required><br>
+  	</div>
+  		
+  		
+  	<div class = "input">
+	<label for="fname">Codice Agente</label><br>
+  		<input type="text" id="codice_creato" name="codice_creato" ><br>
+  	
+ 	</div>
+  
+	<div class = "submit">
+
+  	<input class= "submit" type = "submit" value = "Inserisci"> 
+  	</div>
+  	</div>
+ 
+	
+	</form>
+	
+	</form>
+	<div class = "border">
+	</div>
+	
+	<!-- Form inserimento nuovi agenti -->
+	 <h3> Eliminazione  Agente</h3>
+	<div class = "elimina agente"> 
+	
+	<form method="post" action="GestioneAgenti"  id="form_inserimento_agente">
+	<select name="agente_del" id="agente_del">
+   
+  </select>
+	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
+	 </form>
+	</div>
+	<!--  Richiamo jqxgrid -->
     <div id="jqxgrid"></div>
     
-    <div> <a href="Analisi.html" target="_blank"> <h4> Vai all'analisi</h4></a></div>
+    <div> <a href="Grafici.html" target="_blank"> <h4> Vai all'analisi</h4></a></div>
 </body>
 </html>

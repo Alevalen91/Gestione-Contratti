@@ -1,0 +1,21 @@
+.bg-custom {
+
+background-color: #DAE7FE;
+}
+.navbar-brand{
+  margin-left: 10px;
+  margin-bottom: -10px;
+    font-family: "Copperplate", Papyrus, fantasy;
+}
+
+.header-title {
+  font-family: "Copperplate", Papyrus, fantasy;
+  margin-right: 10px;
+  margin-bottom: -20px;
+}
+.navbar-light{
+  border-bottom: 1px solid;
+  border-color: #c2d3f2;
+
+  margin-bottom: 50px;
+}
