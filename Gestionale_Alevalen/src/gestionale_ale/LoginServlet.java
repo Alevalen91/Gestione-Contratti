@@ -42,10 +42,10 @@ public class LoginServlet extends HttpServlet {
 		user = request.getParameter("user");
 		password = request.getParameter("password");
 		
-			if (password.equals("Ilmar1232")) {
+			if (password.equals("YOURPASSWORD")) {
 			
 			
-			 
+			 // set logged to true and print it for js login session setting
 		      
 		        logged = true;
 		       printer.print(logged);
