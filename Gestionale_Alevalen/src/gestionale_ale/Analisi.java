@@ -68,10 +68,10 @@ public class Analisi extends HttpServlet {
 		try {
 
 			getConn();
-			sql2= "{call Ilmar.select_all}";
+			sql2= "{call ****.select_all}";
 
 			cstm2 = conn.prepareCall(sql2);
-			//cstm2.setString(1, quarter);
+			
 			cstm2.execute();
 			map_agenti = cstm2.getResultSet();
 			while(map_agenti.next()) {
@@ -81,14 +81,15 @@ public class Analisi extends HttpServlet {
 
 
 
-			sql = "{call Ilmar.agente_analisi (?)}";
+			sql = "{call ****.agente_analisi (?)}";
 			cstm = conn.prepareCall(sql);
 			cstm.setString(1, quarter);
 			cstm.execute();
 			agenti = cstm.getResultSet();
 			while(agenti.next()) {
 
-
+				//Map all the sellers and assign them a score for ever contracts typology
+				
 				if (agenti.getString("Tipologia").equals("Sky wifi") || 
 						agenti.getString("Tipologia").equals("Sky 3p")
 
@@ -144,7 +145,7 @@ public class Analisi extends HttpServlet {
 
 
 			}
-
+			// iteration on the keyset to print the scores
 			for ( String key : map.keySet() ) {
 				JSONObject json = new JSONObject();
 				json.put("Agente", key);
