@@ -46,7 +46,7 @@ public class Analisi extends HttpServlet {
 
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
+		conn = DriverManager.getConnection("jdbc:mysql://yourDB","yourUser","YourPassword");
 		return conn;
 	}
 
