@@ -74,7 +74,7 @@ public class FastwebInserimenti extends HttpServlet {
 	
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
+		conn = DriverManager.getConnection("jdbc:mysql://yourDB","yourUser","YourPassword");
 		return conn;
 	}
 	// Close DB connection
@@ -295,11 +295,11 @@ public class FastwebInserimenti extends HttpServlet {
 			writer.close();
 			closeConn();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		}
@@ -326,7 +326,7 @@ public class FastwebInserimenti extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.DeleteFastweb (?) }";
+				sql = "{call ****.DeleteFastweb (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_del);
 				cstm2.execute();
@@ -349,7 +349,7 @@ public class FastwebInserimenti extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.fastweb_attiva (?) }";
+				sql = "{call ****.fastweb_attiva (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_attiva);
 				cstm2.execute();
@@ -373,7 +373,7 @@ public class FastwebInserimenti extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.aggiorna_nota (?, ?) }";
+				sql = "{call ****.aggiorna_nota (?, ?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_nota);
 				cstm2.setString(2, aggiorna_nota);
@@ -429,12 +429,12 @@ public class FastwebInserimenti extends HttpServlet {
 
 
 					if((rs.getString("Account").equals(account))) {
-						sql2 = "{ call Ilmar.UpdateFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
+						sql2 = "{ call ****.UpdateFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
 						break;
 
 					}
 					else{
-						sql2 = "{ call Ilmar.InsertFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
+						sql2 = "{ call ****.InsertFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
 					}
 
 				}
