@@ -72,7 +72,7 @@ public class ContrattiQuery extends HttpServlet {
 
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
+		conn = DriverManager.getConnection("jdbc:mysql://yourDB","yourUser","YourPassword");
 		return conn;
 	}
 
@@ -232,9 +232,9 @@ public class ContrattiQuery extends HttpServlet {
 
 		Integer start = pagesize * pagenum;
 
-		// database connection
+		
 
-		// "jdbc:mysql://localhost:3306/northwind" - the database url of the form jdbc:subprotocol:subname
+		
 
 		try {
 
@@ -253,9 +253,9 @@ public class ContrattiQuery extends HttpServlet {
 			stmt.setInt(2, pagesize);
 
 			ResultSet contratti = stmt.executeQuery();
-			//result.replaceAll("\\","");
+			
 			boolean totalRecordsAdded = false;
-			// format returned ResultSet as a JSON array
+		
 			JSONArray recordsArray = new JSONArray();
 			while ( contratti.next()) {
 				JSONObject currentRecord = new JSONObject();
@@ -293,10 +293,10 @@ public class ContrattiQuery extends HttpServlet {
 			writer.close();
 			closeConn();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -319,7 +319,7 @@ public class ContrattiQuery extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.DELETE (?) }";
+				sql = "{call ****.DELETE (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_del);
 				cstm2.execute();
@@ -339,7 +339,7 @@ public class ContrattiQuery extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.attiva (?) }";
+				sql = "{call ****.attiva (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_attiva);
 				cstm2.execute();
@@ -360,7 +360,7 @@ public class ContrattiQuery extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.aggiorna_nota (?, ?) }";
+				sql = "{call ****.aggiorna_nota (?, ?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_nota);
 				cstm2.setString(2, aggiorna_nota);
@@ -406,7 +406,7 @@ public class ContrattiQuery extends HttpServlet {
 			try {			
 
 				getConn();		
-				sql = "{ call Ilmar.select_all}";
+				sql = "{ call ****.select_all}";
 				cstm = (CallableStatement) conn.prepareCall(sql);			
 				cstm.execute();
 				rs = cstm.getResultSet();
@@ -415,7 +415,7 @@ public class ContrattiQuery extends HttpServlet {
 
 
 					if((rs.getString("Account").equals(account))) {
-						sql2 = "{ call Ilmar.UPDATE (?,?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
+						sql2 = "{ call ****.UPDATE (?,?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
 
 
 						break;
@@ -455,7 +455,7 @@ public class ContrattiQuery extends HttpServlet {
 
 
 				response.sendRedirect("grid.html");
-				//writer.close();
+				
 				closeConn();
 
 
@@ -494,7 +494,7 @@ public class ContrattiQuery extends HttpServlet {
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 	}
 
 	/**
