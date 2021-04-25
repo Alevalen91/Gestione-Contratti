@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import com.mysql.cj.jdbc.CallableStatement;
 
-
 @WebServlet("/GestioneAgenti")
 public class GestioneAgenti extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,12 +28,16 @@ public class GestioneAgenti extends HttpServlet {
 	private String agente;
 	private String codice_agente;
 	private String delete_agente;
+	
+	//Open DB connection 
        
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Ilmar?user=root&password=Alevalen91");
+		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
 		return conn;
 	}
+	
+	// Close Db connection
 	
 	private void closeConn() throws SQLException {
 		conn.close();
@@ -42,6 +45,9 @@ public class GestioneAgenti extends HttpServlet {
   
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// Get sellers list
+		
 		JSONArray recordsArray = new JSONArray();
 		try {
 			getConn();
@@ -70,6 +76,7 @@ catch (SQLException e) {
 			
 		} catch (ClassNotFoundException e) {
 	// TODO Auto-generated catch block
+			response.sendRedirect("Error.html");
 	e.printStackTrace();
 }
 		
@@ -80,11 +87,15 @@ catch (SQLException e) {
 	}
 	catch (SQLException e) {
 		// TODO Auto-generated catch block
+		response.sendRedirect("Error.html");
 		e.printStackTrace();
 	}
 }
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		// Create or delete seller methods
 		
 		agente = request.getParameter("agente_creato");
 		codice_agente = request.getParameter("codice_creato");
@@ -129,15 +140,19 @@ catch (SQLException e) {
 	}
 			catch (SQLException e) {
 				
+				response.sendRedirect("Error.html");
+				
 				e.printStackTrace();
 			}
 		 catch (ClassNotFoundException e) {
+			 response.sendRedirect("Error.html");
 					
 				}
 			try {
 				
 				closeConn();
 			} catch (SQLException e) {
+				response.sendRedirect("Error.html");
 				
 				e.printStackTrace();
 			}

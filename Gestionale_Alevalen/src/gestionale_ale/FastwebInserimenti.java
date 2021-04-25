@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 import java.time.LocalDate;
 
+import java.util.Date;
 
 
 import javax.servlet.ServletException;
@@ -27,11 +29,12 @@ import com.mysql.cj.xdevapi.Statement;
 
 
 
+@WebServlet("/FastwebInserimenti")
 
-@WebServlet("/ContrattiQuery")
-public class ContrattiQuery extends HttpServlet {
+public class FastwebInserimenti extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private String aggiorna_nota;
+	private String account_nota;
 	private Connection conn;
 
 	public ResultSet rs;
@@ -42,48 +45,48 @@ public class ContrattiQuery extends HttpServlet {
 	private String account;
 	private String agente;
 	private String tipologia;
-	private String quarter;
+	private String note;
 	private String codice_agente;
 	private String nome;
 	private String cognome;
-	private String aggiorna_nota;
+	private String account_attiva;
 
 	private PrintWriter writer;
 	private CallableStatement cstm;
 	private java.sql.CallableStatement cstm2;
-	private String note;
-	private String attivazione;
+	private String email;
 	private String delete;
 	private String account_del;
 	private String cap;
 	private String telefono;
 	private String indirizzo;
 
-	private String week;
-	LocalDate ld = LocalDate.parse("1963-10-12") ;
-	private String email;
-	private String account_nota;
-	private String account_attiva;
+	private String attivazione;
+	LocalDate ld = LocalDate.parse( "1960-01-23" ) ;
+
+
+	Date quarter1 = new Date();
+	java.sql.Date sqlDate = new java.sql.Date(quarter1.getTime());
 
 
 
-
-
-
+	// Open DB Connection
+	
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
 		return conn;
 	}
-
+	// Close DB connection
+	
 	private void closeConn() throws SQLException {
 		conn.close();
 	}
 
-
+	// Method Get for JQWidgets Grid
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
+		// Filter, paging, sorting for JQWidgets Grid
 
 		String where = "";
 		Integer filterscount = 0;
@@ -232,22 +235,20 @@ public class ContrattiQuery extends HttpServlet {
 
 		Integer start = pagesize * pagenum;
 
-		// database connection
-
-		// "jdbc:mysql://localhost:3306/northwind" - the database url of the form jdbc:subprotocol:subname
-
+		// Search Data for JQWidgets grid
+		
 		try {
 
 			getConn();
 			// retrieve necessary records from database
 			stm = conn.createStatement();
-			ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM Contratti"	+ where);
+			ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM Fastweb"	+ where);
 			String totalRecords = "";
 			while (totalContratti.next()) {
 				totalRecords = totalContratti.getString("Count");
 			}
 			totalContratti.close();
-			String sql = "SELECT Account, Nome, Cognome, Tipologia, Agente, Codice_agente, Quarter, Attivazione, Telefono, Indirizzo, CAP, Email,  Data_inserimento, Note FROM Contratti " + where + " " + orderby + " LIMIT ?,?";
+			String sql = "SELECT Account, Nome, Cognome, Contratto, Attivazione, Indirizzo, CAP, Telefono, Email, Giorno, Agente, Codice_agente, Note FROM Fastweb " + where + " " + orderby + " LIMIT ?,?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, start);
 			stmt.setInt(2, pagesize);
@@ -265,17 +266,18 @@ public class ContrattiQuery extends HttpServlet {
 				currentRecord.put("Account",	contratti.getObject("Account"));
 				currentRecord.put("Nome", contratti.getObject("Nome"));
 				currentRecord.put("Cognome", contratti.getObject("Cognome"));
-				currentRecord.put("Tipologia", contratti.getObject("Tipologia"));
-				currentRecord.put("Agente", contratti.getObject("Agente"));
-				currentRecord.put("Codice_agente", contratti.getObject("Codice_agente"));
-				currentRecord.put("Quarter", contratti.getObject("Quarter"));
+				currentRecord.put("Contratto", contratti.getObject("Contratto"));
 				currentRecord.put("Attivazione", contratti.getObject("Attivazione"));
-				currentRecord.put("Telefono", contratti.getObject("Telefono"));
 				currentRecord.put("Indirizzo", contratti.getObject("Indirizzo"));
 				currentRecord.put("CAP", contratti.getObject("CAP"));
+				currentRecord.put("Telefono", contratti.getObject("Telefono"));
 				currentRecord.put("Email", contratti.getObject("Email"));
-				currentRecord.put("Data", contratti.getObject("Data_inserimento"));
+				currentRecord.put("Giorno", contratti.getObject("Giorno"));
+				currentRecord.put("Agente", contratti.getObject("Agente"));
+				currentRecord.put("Codice Agente", contratti.getObject("Codice_agente"));
 				currentRecord.put("Note", contratti.getObject("Note"));
+
+
 				if (totalRecordsAdded == false) {
 					// add the number of filtered records to the first record for client-side use
 					currentRecord.put("totalRecords", (totalRecords));
@@ -294,9 +296,11 @@ public class ContrattiQuery extends HttpServlet {
 			closeConn();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
+			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		}
 
@@ -307,11 +311,14 @@ public class ContrattiQuery extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		account_attiva = request.getParameter("account_attiva");
 		delete = request.getParameter("elimina");
 		account_del = request.getParameter("account_del");
-		account_attiva = request.getParameter("account_attiva");
 		aggiorna_nota = request.getParameter("aggiorna_nota");
 		account_nota= request.getParameter("account_nota");
+		
+		// Delete record method
 
 		if(delete != null) {
 
@@ -319,32 +326,12 @@ public class ContrattiQuery extends HttpServlet {
 
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.DELETE (?) }";
+				sql = "{call Ilmar.DeleteFastweb (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_del);
 				cstm2.execute();
 				cstm2.close();
-				response.sendRedirect("grid.html");
-				writer.close();
-				closeConn();
-			} catch (ClassNotFoundException | SQLException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-		else if (account_attiva != null) {
-
-			try {
-
-				writer=response.getWriter();
-				getConn();
-				sql = "{call Ilmar.attiva (?) }";
-				cstm2 = conn.prepareCall(sql);
-				cstm2.setString(1, account_attiva);
-				cstm2.execute();
-				cstm2.close();
-				response.sendRedirect("grid.html");
+				response.sendRedirect("fastweb.html");
 				writer.close();
 				closeConn();
 			} catch (ClassNotFoundException | SQLException e) {
@@ -353,6 +340,32 @@ public class ContrattiQuery extends HttpServlet {
 			}
 
 		}
+		
+		//Account activation method
+
+		else if (account_attiva != null) {
+
+			try {
+
+				writer=response.getWriter();
+				getConn();
+				sql = "{call Ilmar.fastweb_attiva (?) }";
+				cstm2 = conn.prepareCall(sql);
+				cstm2.setString(1, account_attiva);
+				cstm2.execute();
+				cstm2.close();
+				response.sendRedirect("grid.html");
+				writer.close();
+				closeConn();
+			} 
+			catch (ClassNotFoundException | SQLException e) {
+				response.sendRedirect("Error.html");
+				e.printStackTrace();
+			}
+
+		}
+		
+		// Notes update method
 
 		else if (aggiorna_nota != null) {
 
@@ -375,107 +388,87 @@ public class ContrattiQuery extends HttpServlet {
 			}
 
 		}
-
-
+		
+		//Insert or update record method 
+		
 		else {
-
-
-			quarter = request.getParameter("quarter_par");
-			attivazione = request.getParameter("Attivazione");		
-			tipologia = request.getParameter("Tipologia");
-			week = request.getParameter("Week");
-
-			if(week.equals("Yes")) {
-				tipologia += " Week";
-			}
 
 
 			telefono = request.getParameter("Telefono");
 			indirizzo = request.getParameter("Indirizzo");
 			cap = request.getParameter("Cap");
+			attivazione = request.getParameter("Attivazione");	
 			account = request.getParameter("account_par");
 			agente = request.getParameter("Agente");
+			tipologia = request.getParameter("Tipologia");
 			nome= request.getParameter("nome_par");
 			cognome = request.getParameter("cognome_par");
-			ld = LocalDate.parse(request.getParameter("Data"));
+
 			codice_agente = request.getParameter("codice_agente_par");
 			email = request.getParameter("Email");
 			note = request.getParameter("note");
 
 
-			try {			
+			try {
+				ld = LocalDate.parse(request.getParameter("Data"));
 
-				getConn();		
-				sql = "{ call Ilmar.select_all}";
-				cstm = (CallableStatement) conn.prepareCall(sql);			
+				getConn();
+
+
+
+
+				sql = "{ call SelectFastweb}";
+				cstm = (CallableStatement) conn.prepareCall(sql);
+
 				cstm.execute();
 				rs = cstm.getResultSet();
+
+
 
 				while (rs.next()){
 
 
 					if((rs.getString("Account").equals(account))) {
-						sql2 = "{ call Ilmar.UPDATE (?,?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
-
-
+						sql2 = "{ call Ilmar.UpdateFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
 						break;
 
 					}
 					else{
-						sql2 = "{ call Ilmar.INSERT (?,?,?,?,?,?,?,?,?,?,?,?, ? , ?)}";
-
+						sql2 = "{ call Ilmar.InsertFastweb (?,?,?,?,?,?,?,?,?,?,?, ?, ?)}";
 					}
 
 				}
+
+
 
 				cstm2 = conn.prepareCall(sql2);
 				cstm2.setString(1,account);
 				cstm2.setString(2, nome);
 				cstm2.setString(3, cognome);
 				cstm2.setString(4, tipologia);
-				cstm2.setString(5, agente);
-				cstm2.setString(6, codice_agente);
-				cstm2.setString(7, quarter);
-				cstm2.setString(8, attivazione);
-				cstm2.setString(9, telefono);
-				cstm2.setString(10, indirizzo);
-				cstm2.setString(11, cap);
-				cstm2.setObject (12,ld);
-				cstm2.setString(13, email);
-				cstm2.setString(14, note);
+				cstm2.setString(5, attivazione);
+				cstm2.setString(6, indirizzo);
+				cstm2.setString(7, cap);					
+				cstm2.setString(8, telefono);
+				cstm2.setString(9, agente);
+				cstm2.setString(10, codice_agente);
+				cstm2.setObject (11,ld);
+				cstm2.setString(12, email);
+				cstm2.setString(13, note);
+
 
 				cstm2.execute();
 				cstm2.close();
 
-
-
-
-
-
-
-
-				response.sendRedirect("grid.html");
+				response.sendRedirect("fastweb.html");
 				//writer.close();
 				closeConn();
-
-
-
-
-				//rs = cstm.getResultSet();
-
-
-				//writer.print(state);
-
-
-
-
-
-
 
 			}
 			catch (SQLException e) {
 
 				e.printStackTrace();
+
 				response.sendRedirect("Error.html");
 			}
 			catch (ClassNotFoundException e) {
@@ -490,18 +483,14 @@ public class ContrattiQuery extends HttpServlet {
 
 
 
-	/**
-	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
-	 */
+
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 	}
 
-	/**
-	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
-	 */
+
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 
 
 

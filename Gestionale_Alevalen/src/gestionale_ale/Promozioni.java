@@ -42,7 +42,7 @@ public class Promozioni extends HttpServlet {
 
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Ilmar?user=root&password=Alevalen91");
+		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
 		return conn;
 	}
 	
@@ -112,9 +112,9 @@ public class Promozioni extends HttpServlet {
 	
   }
 catch (SQLException e) {
-			
+	response.sendRedirect("Error.html");
 		} catch (ClassNotFoundException e) {
-	// TODO Auto-generated catch block
+			response.sendRedirect("Error.html");
 	e.printStackTrace();
 }
 		
@@ -126,7 +126,7 @@ catch (SQLException e) {
 	try {
 		closeConn();
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
+		response.sendRedirect("Error.html");
 		e.printStackTrace();
 	}
 }
@@ -155,6 +155,7 @@ if(promo_del != null) {
 				closeConn();
 			} catch (ClassNotFoundException | SQLException e) {
 				
+				response.sendRedirect("Error.html");
 				e.printStackTrace();
 			}
 			
@@ -210,11 +211,11 @@ if(promo_del != null) {
 					
 			}
 		catch (SQLException e) {
-			
+			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		}
 	 catch (ClassNotFoundException e) {
-				
+		 response.sendRedirect("Error.html");
 			}
 		}
 	}
@@ -233,7 +234,7 @@ if(promo_del != null) {
 		
 			closeConn();
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
+			response.sendRedirect("Error.html");
 			e.printStackTrace();
 		}
 		

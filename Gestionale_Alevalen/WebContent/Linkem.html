@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Fastweb</title>
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Linkem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     	   <link rel = "stylesheet" href="css/Index.css" >
     	   <link rel = "stylesheet" href="css/header.css" >
     	   	  <link rel = "stylesheet" href="css/footer.css" >
@@ -26,15 +26,8 @@
     <script type="text/javascript" src="jqwidgets/jqxdata.export.js"></script>
      <script type="text/javascript" src="jqwidgets/jqxgrid.export.js"></script>
      <script src = "js/LoginControl.js"> </script>
-     <script src = "js/GrigliaFastweb.js"> </script>
+      <script src = "js/GrigliaLinkem.js"> </script>
    <!-- Script sorgente grid -->
-   
-  
-    
-      <style>
-    
-    html { visibility:hidden;}
-    </style>
    
    <style>
    div.border {
@@ -46,8 +39,15 @@
    }
    
    </style>
-   
+     <style>
+    
+    html { visibility:hidden;}
+    </style>
     <script type="text/javascript">
+       
+        
+        
+        
         // Script button delete 
         
         
@@ -56,7 +56,7 @@
 $("#delete").click(function() {
 var account = $("#account_del").val();
 $.ajax({
-url: "/ContrattiQuery",
+url: "/LinkemInserimenti",
 type: "DELETE",
 data: {
 Account : account,
@@ -103,6 +103,8 @@ location.reload();
 
     
     </script>
+    
+
     
     <style>
     .submit::hover{
@@ -174,7 +176,7 @@ Gestione Ilmar
 
 		<!-- Form inserimento nuovo record contratto  -->
 		
-	<form method="post" action="FastwebInserimenti"  id="form">
+	<form method="post" action="LinkemInserimenti"  id="form">
 	
 	
 	<div class = "input">
@@ -214,6 +216,7 @@ Gestione Ilmar
   		<input type="text" id="Indirizzo" name="Indirizzo" required><br>
 		</div>
 		<br>
+		
 		<div class = "input">
   		 <label for="fname">Cap</label><br>
   		<input type="text" id="Cap" name="Cap" maxlength="5" required><br>
@@ -230,7 +233,7 @@ Gestione Ilmar
   		 <label for="fname">Data</label><br>
   		<input type="date" id="Data" name="Data" required ><br>
 		</div>
-  		<br>
+  		
   		<div class = "input">
 	 <label for="Agente">Selezione Agente</label>
   <select name="Agente" id="Agente">
@@ -242,10 +245,10 @@ Gestione Ilmar
   	<div class = "input">
    <label for="Tipologia">Selezione Contratto</label>
   <select name="Tipologia" id="Tipologia">
-    <option value="Residenziale Fisso">Residenziale Fisso </option>
-    <option value="Residenziale Mobile">Residenziale Mobile</option>
-    <option value="Business Fisso">Business Fisso</option>
-    <option value="Business Mobile">Business Mobile</option>
+    <option value="Residenziale Ricaricabile">Residenziale Ricaricabile</option>
+    <option value="Residenziale Abbonamento">Residenziale Abbonamento</option>
+    <option value="Business Ricaricabile">Business Ricaricabile</option>
+    <option value="Business Abbonamento">Business Abbonamento</option>
   </select>
   	</div>
   	<br>
@@ -270,7 +273,7 @@ Gestione Ilmar
 	<div class = "col-4"> 
 	<h3> Attivazione Contratti</h3>
 	
-	<form method="post" action="FastwebInserimenti"  id="form_attivazione">
+	<form method="post" action="ContrattiQuery"  id="form_attivazione">
 	<label for="account_attiva">Nr. Ordine</label><br>
 	 <input type = "text" id = "account_attiva" name= "account_attiva"  required>
 	 <input class= "submit" type = "submit" value = "Attiva" name = "Attiva"> 
@@ -284,8 +287,8 @@ Gestione Ilmar
 
 	<div class = "col-4 offset-md-2" style = " border-left: 1px solid"> 
 	<h3> Eliminazione <br> record</h3>
-	<form method="post" action="FastwebInserimenti"  id="form_delete">
-	<label for="account_del">Account</label><br>
+	<form method="post" action="LinkemInserimenti"  id="form_delete">
+	<label for="account_del">Nr. Ordine</label><br>
 	 <input type = "text" id = "account_del" name= "account_del"  required>
 	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
 	 </form>
@@ -300,7 +303,7 @@ Gestione Ilmar
 	
 	<!-- Aggiornamento nota -->
 	<div>
-	<form method="post" action="FastwebInserimenti"  id="nota">
+	<form method="post" action="LinkemInserimenti"  id="nota">
 	<label for="account_nota">Account</label><br>
 	 <input type = "text" id = "account_nota" name= "account_nota"  required>
   		 <label for="fname">Note:</label><br>
@@ -368,7 +371,7 @@ Gestione Ilmar
 		<div class = "border">
 	</div>
 	<!--  Richiamo jqxgrid -->
-  	 <div class="row justify-content-center ">
+ 	 <div class="row justify-content-center ">
 	 
     <div class = "col-8" id="jqxgrid"></div>
    
@@ -377,11 +380,9 @@ Gestione Ilmar
     <div class="col-md-4"></div>
     <div class="col-md-4 offset-md-4"><input style='margin-top: 10px;' type="button" value="Export to Excel" id='excelExport' /></div>
   </div>
-    
-   
-    
-    
-     <!--  Footer  -->
+  
+  
+    <!--  Footer  -->
      <footer id= "footer">
 
       <div class = "row justify-content-space-around ">
@@ -415,5 +416,7 @@ Gestione Ilmar
 
     </footer>
      
+    
+    
 </body>
 </html>

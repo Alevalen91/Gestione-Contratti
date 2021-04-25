@@ -3,10 +3,12 @@
 <head>
     <title>Gestione promo</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    
     	
-    	  <link rel = "stylesheet" href="css/footer.css" >
     	   <link rel = "stylesheet" href="css/Index.css" >
     	   <link rel = "stylesheet" href="css/header.css" >
+    	   	<link rel = "stylesheet" href="css/gestione_promo.css" >
+    	   	  <link rel = "stylesheet" href="css/footer.css" >
     <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="jqwidgets/styles/jqx.light.css" type="text/css" />
     <link rel="stylesheet" href="jqwidgets/styles/jqx.energyblue.css" type="text/css" />
@@ -24,10 +26,11 @@
     <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
     <script type="text/javascript" src="scripts/demos.js"></script>
+     <script src = "js/LoginControl.js"> </script>
    	<script>
     $.ajax({ 
         type: 'GET', 
-        url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+        url: '/Promozioni', 
          
         dataType: 'html',
         success: function (data) {
@@ -54,48 +57,15 @@
 
    	
    	</script>
+   	
+   	  <style>
     
-    <style>
-  
-    .submit{
-  	
-    margin-top: 15px;
-
-    
-    
-    }
-    
-    h5{
-    margin-top: -10px;
-    }
-    .elimination{
-    
-    margin-top: 50px;
-    margin-bottom: 30px;
-    
-    }
-    
-    div {
-    margin-left: 20px;
-    align-items: center;
-    }
-    
-    form {
-    align-items : center;
-    
-    }
-  
-    
-   
-    .input{
-	
-    margin-bottom: 5px;
-    display : inline-block;
-    
-    }
-    
-
+    html { visibility:hidden;}
     </style>
+   	
+   	
+    
+
     
     
 </head>
@@ -106,6 +76,8 @@
     <img src="images/ilmarlogo.png" width="40" height="40" class="d-inline-block align-bottom" alt="">
 Gestione Ilmar
   </a>
+  
+   <input type = "button" value = "Logout" id = "logout"> 
 </nav>
 <div class = "contaneir">
 <div class = "row">
@@ -119,7 +91,7 @@ Gestione Ilmar
 </div>
 <div class = "row">
 <div class="mb-3 col-6">
-  <label for="Descrizione" class="form-label">Example textarea</label>
+  <label for="Descrizione" class="form-label">Descrizione</label>
   <textarea class="form-control input" id="Descrizione" name = "Descrizione" rows="10"  placeholder= "Inserisci qui la descrizione della promo" required></textarea>
     	<input class= "submit" type = "submit" value = "Inserisci"> 
   
@@ -138,7 +110,7 @@ Gestione Ilmar
   	
  
 	
-	</form>
+
 	
 	
 
@@ -164,6 +136,44 @@ Gestione Ilmar
 	</a>
 	</div>
 	</div>
+	
+	
+	 <!--  Footer  -->
+     <footer id= "footer">
+
+      <div class = "row justify-content-space-around ">
+        <div id = "contatti" class = "col col-md-5 col-lg-5">
+          <h5 class="contatti" > Contatti </h5>
+          <ul>
+          <li class = "mail"> <a href = "mailto: abc@example.com">alessiovalentex@gmail.com</a></li>
+            <li class = "phone"> 3482943264</li>
+            </ul>
+        </div>
+
+        <div id = "sito" class = "col-md-2 col-lg-2">
+         
+        </div>
+
+          <div  class = "col col-md-5 col-lg-5">
+            <div>
+            <h5 class = "newsletter">Iscriviti alla newsletter!</h5>
+          </div>
+          <div>
+            
+            <ul>
+              <li> <a class="navbar-brand" href="Index.html"> Homepage </a> </li>
+            <li>  <a class="navbar-brand" href="Inserimenti.html"> Inserimenti </a> </li>
+             <li> <a class="navbar-brand" href="Grafici.html"> Analisi Sky </a> </li>
+             <li>  <a class="navbar-brand" href="Gestione_promo.html"> Gestione Promozione Sky </a> </li>
+            <li>  <a class="navbar-brand" href="Collaboratori.html"> Pagina Collaboratori </a> </li>
+             </ul>
+          </div>
+          </div>
+        </div>
+
+
+    </footer>
+     
 	
 	
 	

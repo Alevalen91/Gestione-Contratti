@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JRE [15.0.1]">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/Users/ale/Desktop/apache-tomcat-9.0.43/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/MyWebApp/WebContent/WEB-INF/lib/json-20201115.jar"/>
-	<classpathentry kind="lib" path="/MyWebApp/WebContent/WEB-INF/lib/mysql-connector-java-8.0.23.jar"/>
-	<classpathentry kind="lib" path="/Users/ale/Desktop/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ale/Desktop/Drivers/json-20201115.jar"/>
+	<classpathentry kind="lib" path="/Users/ale/Desktop/Drivers/mysql-connector-java-8.0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/ale/Desktop/Drivers/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/ale/Desktop/Drivers/apache-tomcat-9.0.44/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

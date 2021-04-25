@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
  	<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
    
-   
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    	   <link rel = "stylesheet" href="css/Index.css" >
+    	   <link rel = "stylesheet" href="css/header.css" >
+    	   	  <link rel = "stylesheet" href="css/footer.css" >
    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     
@@ -15,7 +18,7 @@
     
     $.ajax({ 
         type: 'GET', 
-        url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+        url: '/Promozioni', 
          
         dataType: 'html',
         success: function (data) {
@@ -49,7 +52,7 @@
     	
     	$.ajax({ 
             type: 'GET', 
-            url: 'http://localhost:8080/Gestionale_Alevalen/Promozioni', 
+            url: '/Promozioni', 
              data: {Promozione: val},
             dataType: 'html',
             success: function (data) {
@@ -125,7 +128,7 @@
           <h5 class="contatti" > Contatti </h5>
           <ul>
           <li class = "mail"> <a href = "mailto: abc@example.com">ilmar@ilmar.it</a></li>
-            <li class = "phone"> 3482943264</li>
+            <li class = "phone"> 065698930</li>
             </ul>
         </div>
 

@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Uso di una jqxGrid con JSP</title>
-    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
-    <link rel="stylesheet" href="jqwidgets/styles/jqx.light.css" type="text/css" />
-    <link rel="stylesheet" href="jqwidgets/styles/jqx.energyblue.css" type="text/css" />
+    <title>Inserimenti Sky</title>
+    
+      <style>
+   div.border {
+   
+   border-bottom: 1px solid;
+   border-color: #c2d3f2;
+   margin: 20px;
+   
+   }
+   
+	div.container{
+	
+	margin-bottom: 20px;
+	
+	}
+   
+
+   
+   </style>
+  
     <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
@@ -19,215 +36,22 @@
     <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
     <script type="text/javascript" src="scripts/demos.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.export.js"></script>
+     <script type="text/javascript" src="jqwidgets/jqxgrid.export.js"></script>
+    <script src = "js/LoginControl.js"> </script> 
+      <script src = "js/GrigliaSky.js"> </script>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+   
+   	  <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.light.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.energyblue.css" type="text/css" />
+   
    <!-- Script sorgente grid -->
    
-   <style>
-   div.border {
-   
-   border-bottom: 1px solid;
-   border-color: #c2d3f2;
-   margin: 20px;
-   
-   }
-   
-   </style>
+ 
    
     <script type="text/javascript">
-        $(document).ready(function () {
-            var source = {
-                datatype: "json",
-                datafields: [{
-                    name: 'Account',
-                    type: 'string'
-                }, {
-                    name: 'Nome',
-                    type: 'string'
-                },
-                
-                {
-                	name: 'Cognome',
-                	type : 'string'
-                },
-                
-                {
-                	name: 'Tipologia',
-                	type: 'string'
-                },
-                
-                {
-                	name: 'Agente',
-                	type: 'string'
-                },
-                
-                {
-                	name: 'Codice_agente',
-                	type: 'string'
-                },
-                
-                {
-                	name: 'Quarter',
-                	type: 'string'
-                },
-                
-                {
-                	name: 'Telefono',
-                	type: 'int'
-                },
-                
-                {
-                	name: 'Indirizzo',
-                	type: 'string'
-                },
-                
-                {
-                	name: 'CAP',
-                	type: 'int'
-                },
-                
-                {
-                	name: 'Data',
-                	type: 'string'
-                },
-                
-                ],
-                cache: false,
-                
-                id: 'Account',
-                url: 'http://localhost:8080/Gestionale_Alevalen/ContrattiQuery',
-                filter: function() {
-                    // update the grid and send a request to the server.
-                    $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
-                },
-                
-                sort: function() {
-                    // update the grid and send a request to the server.
-                    $("#jqxgrid").jqxGrid('updatebounddata', 'sort');
-                },
-                
-                
-               async: true,
-                
-                beforeprocessing: function(data) {
-                    if (data != null && data.length > 0) {
-                    	 source.totalrecords = data[0].totalRecords;
-                    }
-                }
-               
-            };
-            
-            var filterChanged = false;
-            var dataadapter = new $.jqx.dataAdapter(source , {
-				
-				// remove the comment to debug
-              //  formatData: function(data) {
-				//	alert(JSON.stringify(data));
-					//alert(data);
-				//	console.log (data);
-					
-                   // return data;
-                //},
-                downloadComplete: function(data, status, xhr) {
-                	  if (!source.totalRecords) {
-                          source.totalRecords = data.length;
-                    }
-                },
-                loadError: function(xhr, status, error) {
-                    throw new Error(error);
-                }
-            });
-            
-            
-            
 
-            $("#jqxgrid").jqxGrid({
-                width: 1000,
-             
-                source: dataadapter,
-                filterable: true,
-                sortable: true,
-              	autoheight: true,
-              	theme: 'energyblue',
-                pageable: true,
-                pagesize: 3,
-                pagesizeoptions: ['3', '4', '5'],
-                virtualmode: true,
-                rendergridrows: function(obj) {
-                    return obj.data;
-                },
-            
-              
-            
-                columns: [{
-                    text: 'Account',
-                    datafield: 'Account',
-                    width: 100
-                }, {
-                    text: 'Nome',
-                    datafield: 'Nome',
-                    width: 200
-                },
-                {
-                	text: 'Cognome',
-                	datafield: 'Cognome',
-                	width:  200
-                },
-                
-                {
-                	text: 'Tipologia',
-                	datafield: 'Tipologia',
-                	width:  200
-                },
-                
-                {
-                	text: 'Agente',
-                	datafield: 'Agente',
-                	width:  200
-                },
-                
-                {
-                	text: 'Codice_Agente',
-                	datafield: 'Codice_agente',
-                	width:  200
-                },
-                
-                {
-                	text: 'Quarter',
-                	datafield: 'Quarter',
-                	width:  200
-                },
-                
-                {
-                    text: 'Telefono',
-                    datafield: 'Telefono',
-                    width: 100
-                },
-                
-                {
-                    text: 'Indirizzo',
-                    datafield: 'Indirizzo',
-                    width: 300
-                },
-                
-                {
-                    text: 'CAP',
-                    datafield: 'CAP',
-                    width: 50
-                },
-                
-                {
-                    text: 'Data',
-                    datafield: 'Data',
-                    width: 80
-                },
-                
-                
-                ]
-            });
-        });
-        
-        
-        
-        
         // Script button delete 
         
         
@@ -236,7 +60,7 @@
 $("#delete").click(function() {
 var account = $("#account_del").val();
 $.ajax({
-url: "http://localhost:8080/Gestionale_Alevalen/ContrattiQuery",
+url: "/ContrattiQuery",
 type: "DELETE",
 data: {
 Account : account,
@@ -258,7 +82,7 @@ location.reload();
     
     $.ajax({ 
         type: 'GET', 
-        url: 'http://localhost:8080/Gestionale_Alevalen/ContrattiQuery', 
+        url: '/GestioneAgenti', 
         dataType: 'json',
         success: function (data) {
         	obj = (data);
@@ -283,6 +107,13 @@ location.reload();
 
     
     </script>
+    
+     <style> 
+    
+     html { visibility:hidden;} 
+     </style> 
+    
+ 
     
     <style>
     .submit::hover{
@@ -337,7 +168,7 @@ background-color: #DAE7FE;
     <link rel = "stylesheet" href="css/footer.css" >
     <link rel = "stylesheet" href="css/header.css" >
 </head>
-<body class = "default">
+<body class = "default" >
 
 <nav class="navbar navbar-light  bg-custom">
   <a class="navbar-brand" href="Index.html">
@@ -383,7 +214,7 @@ Gestione Ilmar
   		<div class = "input">
   		
   		<label for="fname">Codice Agente</label><br>
-  		<input type="text" id="codice_agente_par" name="codice_agente_par" ><br>
+  		<input type="text" id="codice_agente_par" name="codice_agente_par" required><br>
   		
   		</div>
   		
@@ -391,18 +222,48 @@ Gestione Ilmar
   		 <label for="fname">Indirizzo</label><br>
   		<input type="text" id="Indirizzo" name="Indirizzo" required><br>
 		</div>
+		<br>
 		
 		<div class = "input">
   		 <label for="fname">Cap</label><br>
   		<input type="text" id="Cap" name="Cap" maxlength="5" required><br>
 		</div>
-		<br>
+		
+			<div class = "input">
+  		 <label for="fname">Email</label><br>
+  		<input type="email" id="Email" name="Email" required><br>
+		</div>
+		
 		
 		
 		<div class = "input">
-  		 <label for="fname">Data</label><br>
-  		<input type="date" id="Data" name="Data" required ><br>
+  		 <label for="fname">Data</label> <br>
+  		<input type="date" id="Data" name="Data" required >
 		</div>
+		
+		
+		<div class = "input">
+  		 <label for="fname">Quarter</label><br>
+  		<input type="number" id="quarter_par" name="quarter_par" max = "4" min = "1" required >
+		</div>
+		<br>
+		
+		<div class = "input">
+   <label for="Week"> Week speciale?</label>
+  <select name="Week" id="Week">
+    <option value="No">N</option>
+       <option value="Yes">Y</option>
+  		</select>
+  		</div>
+  		
+  			<div class = "input">
+   <label for="Attivazione"> Attivato?</label>
+  <select name="Attivazione" id="Attivazione">
+    <option value="No">N</option>
+       <option value="Yes">Y</option>
+  		</select>
+  		</div>
+  		
   		
   		<div class = "input">
 	 <label for="Agente">Selezione Agente</label>
@@ -415,70 +276,136 @@ Gestione Ilmar
   	<div class = "input">
    <label for="Tipologia">Selezione Contratto</label>
   <select name="Tipologia" id="Tipologia">
-    <option value="Contratto1">Contratto1</option>
-    <option value="Contratto2">Contratto2</option>
-    <option value="Contratto3">Contratto3</option>
-    <option value="Contratto4">Contratto4</option>
+    <option value="Sky wifi">Sky wifi</option>
+    <option value="Sky 3p">Sky 3p</option>
+    <option value="Upselling">Upselling</option>
+    <option value="Residenziale">Residenziale</option>
+    <option value="Dtt">Dtt</option>
+     <option value="Business">Business</option>
+      <option value="Prova Sky">Prova Sky</option>
+      <option value="Voucher">Voucher</option>
+    
+      <option value="Reco">Reco</option>
+
   </select>
-  	</div>
+  <br>
+  </div>
+	<div class = "input">
+  		 <label for="fname">Note:</label><br>
+  		<input type="text" id="note" name="note" Placeholder = "Note" Size = "50" maxlength="400">
+		</div>
+ 
+ </div>
 	<div class = "submit">
 	  <input type="reset">
   	<input class= "submit" type = "submit" value = "Inserisci"> 
   	</div>
-  	</div>
+  </form>
+
+
+  
  
 	
-	</form>
+
 	<div class = "border">
+	</div>
+	
+	
+	
+<!-- Form Attiva Contratto -->
+	<div class = "container">
+	<div class="row">
+	<div class = "col-4"> 
+	<h3> Attivazione Contratti</h3>
+	
+	<form method="post" action="ContrattiQuery"  id="form_attivazione">
+	<label for="account_attiva">Account</label><br>
+	 <input type = "text" id = "account_attiva" name= "account_attiva"  required>
+	 <input class= "submit" type = "submit" value = "Attiva" name = "Attiva"> 
+	 </form>
+	
+	
+	
+	
 	</div>
 	<!-- Form eliminazione record contratto  -->
 
-	<div class = "elimination"> 
-	<h3> Eliminazione record</h3>
+	<div class = "col-4 offset-md-2" style = " border-left: 1px solid"> 
+	<h3> Eliminazione <br> record</h3>
 	<form method="post" action="ContrattiQuery"  id="form_delete">
 	<label for="account_del">Account</label><br>
 	 <input type = "text" id = "account_del" name= "account_del"  required>
 	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
 	 </form>
-	</div>
 	
-	</form>
+	
+
+	</div>
 	<div class = "border">
 	</div>
+	</div>
+	</div>
+	<!-- Aggiornamento nota -->
+	<div><h3> Aggiorna note</h3>
+	<h6> Inserisci l'account e le note aggiornate</h6>
+	</div>
+	<div>
+	<form method="post" action="ContrattiQuery"  id="nota">
+	<label for="account_nota">Account</label><br>
+	 <input type = "text" id = "account_nota" name= "account_nota"  required>
+  		 <label for="fname">Note:</label><br>
+  		<input type="text" id="aggiorna_nota" name="aggiorna_nota" Placeholder = "Note" Size = "50" maxlength="400" required>
+  		 <input class= "submit" type = "submit" value = "Aggiorna" name = "aggiorna_nota"> 
+  		  </form>
 	
+		</div>
+		
+			
+		<div class = "border">
+	</div>
 	<!-- Form inserimento nuovo agente  -->
+	
+	<div class = "container">
+	<div class="row">
+	<div class = "col-4">
 	<h3> Inserimento nuovo Agente</h3>
 	<form method="post" action="GestioneAgenti"  id="form">
 	
-	<div >
-	<div class = "input">
+	
+	
 	<label for="fname">Agente</label><br>
   		<input type="text" id="agente_creato" name="agente_creato" required><br>
-  	</div>
+  	
   		
   		
-  	<div class = "input">
+  	
 	<label for="fname">Codice Agente</label><br>
   		<input type="text" id="codice_creato" name="codice_creato" ><br>
   	
- 	</div>
+ 	
   
-	<div class = "submit">
+	
 
   	<input class= "submit" type = "submit" value = "Inserisci"> 
-  	</div>
-  	</div>
+  
+  	</form>
+  		
+  	
  
 	
-	</form>
 	
-	</form>
-	<div class = "border">
+	
 	</div>
 	
-	<!-- Form inserimento nuovi agenti -->
-	 <h3> Eliminazione  Agente</h3>
-	<div class = "elimina agente"> 
+	
+	
+
+	
+	<!-- Form eliminazione  agenti -->
+	 
+	 	<div class=  "col-4 offset-md-2" style = " border-left: 1px solid; margin-top: -180px">
+	  <h3> Eliminazione  Agente</h3> 
+	
 	
 	<form method="post" action="GestioneAgenti"  id="form_inserimento_agente">
 	<select name="agente_del" id="agente_del">
@@ -487,9 +414,61 @@ Gestione Ilmar
 	 <input class= "submit" type = "submit" value = "Elimina" name = "elimina"> 
 	 </form>
 	</div>
+	</div>
+	</div>
+		
+		
+		<div class = "border">
+	</div>
 	<!--  Richiamo jqxgrid -->
-    <div id="jqxgrid"></div>
+	
+	<div>
+	<div>  <a href="Grafici.html" > <h4> Vai all'analisi</h4></a></div>
+	 <div class="row justify-content-center ">
+	 
+    <div class = "col-8" id="jqxgrid"></div>
+   
+ 	<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 offset-md-4"><input style='margin-top: 10px;' type="button" value="Export to Excel" id='excelExport' /></div>
+  </div>
     
-    <div> <a href="Grafici.html" target="_blank"> <h4> Vai all'analisi</h4></a></div>
+    </div>
+    <!--  Footer  -->
+     <footer id= "footer">
+
+      <div class = "row justify-content-space-around ">
+        <div id = "contatti" class = "col col-md-5 col-lg-5">
+          <h5 class="contatti" > Contatti </h5>
+          <ul>
+          <li class = "mail"> <a href = "mailto: abc@example.com">alessiovalentex@gmail.com</a></li>
+            <li class = "phone"> 3482943264</li>
+            </ul>
+        </div>
+
+        <div id = "sito" class = "col-md-2 col-lg-2">
+         
+        </div>
+
+          <div  class = "col col-md-5 col-lg-5">
+          
+          <div>
+            
+            <ul>
+              <li> <a class="navbar-brand" href="Index.html"> Homepage </a> </li>
+            <li>  <a class="navbar-brand" href="Inserimenti.html"> Inserimenti </a> </li>
+             <li> <a class="navbar-brand" href="Grafici.html"> Analisi Sky </a> </li>
+             <li>  <a class="navbar-brand" href="Gestione_promo.html"> Gestione Promozione Sky </a> </li>
+            <li>  <a class="navbar-brand" href="Collaboratori.html"> Pagina Collaboratori </a> </li>
+             </ul>
+          </div>
+          </div>
+        </div>
+
+
+    </footer>
+     
+   
 </body>
 </html>

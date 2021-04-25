@@ -7,13 +7,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
-import java.util.Calendar;
+
 import java.util.Date;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,12 +29,13 @@ import com.mysql.cj.xdevapi.Statement;
 
 
 
-@WebServlet("/ContrattiQuery")
-public class Fastweb_inserimenti extends HttpServlet {
+@WebServlet("/LinkemInserimenti")
+public class LinkemInserimenti extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+	private String aggiorna_nota;
+	private String account_nota;
 	private Connection conn;
-	private PreparedStatement pstmt;
+	
 	public ResultSet rs;
 	public ResultSet rs2;
 	private String sql;
@@ -44,37 +44,37 @@ public class Fastweb_inserimenti extends HttpServlet {
 	private String account;
 	private String agente;
 	private String tipologia;
-	private String quarter;
+	private String email;
 	private String codice_agente;
 	private String nome;
 	private String cognome;
-	private boolean update;
-	private String result = "";
+	
+	
 	private PrintWriter writer;
 	private CallableStatement cstm;
 	private java.sql.CallableStatement cstm2;
-	private String [] account_array;
+	
 	private String delete;
 	private String account_del;
 	private String cap;
 	private String telefono;
 	private String indirizzo;
-	private Date data;
-	private String data_string;
+
 	LocalDate ld = LocalDate.parse( "1960-01-23" ) ;
 	
 	  
-	Date quarter1 = new Date();
-	java.sql.Date sqlDate = new java.sql.Date(quarter1.getTime());
+
 
 
 	 
-       
+       // Open Db connection 
+	
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Ilmar?user=root&password=Alevalen91");
+		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
 		return conn;
 	}
+	// Close DB Connection 
 	
 	private void closeConn() throws SQLException {
 		conn.close();
@@ -83,7 +83,7 @@ public class Fastweb_inserimenti extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
+		//Set filtering, sorting and paging for JQWidgets grid
 		
 		String where = "";
 		Integer filterscount = 0;
@@ -213,9 +213,8 @@ public class Fastweb_inserimenti extends HttpServlet {
 			{
 				pagenum = Integer.parseInt(request.getParameter("pagenum"));
 			}
-			catch (NumberFormatException nfe) {}
-			{
-			}		
+			catch (NumberFormatException nfe) {response.sendRedirect("Error.html");}
+					
 		}
 		
 		Integer pagesize = 1000;
@@ -225,9 +224,11 @@ public class Fastweb_inserimenti extends HttpServlet {
 			{
 				pagesize = Integer.parseInt(request.getParameter("pagesize"));
 			}
-			catch (NumberFormatException nfe) {}
-			{
-			}		
+			catch (NumberFormatException nfe) {
+				
+				response.sendRedirect("Error.html");
+			}
+					
 		}
 		
 		Integer start = pagesize * pagenum;
@@ -238,21 +239,21 @@ public class Fastweb_inserimenti extends HttpServlet {
 		getConn();
 		// retrieve necessary records from database
 		stm = conn.createStatement();
-		ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM Fastweb"	+ where);
+		ResultSet totalContratti = stm.executeQuery("SELECT COUNT(*) AS Count FROM Linkem"	+ where);
 		String totalRecords = "";
 		while (totalContratti.next()) {
 			totalRecords = totalContratti.getString("Count");
 		}
 		totalContratti.close();
-		String sql = "SELECT Account, Nome, Cognome, Contratto, Indirizzo, CAP, Telefono, Giorno, Agente, Codice_agente FROM Fastweb " + where + " " + orderby + " LIMIT ?,?";
+		String sql = "SELECT Account, Nome, Cognome, Contratto, Indirizzo, CAP, Telefono, Email, Giorno, Agente, Codice_agente FROM Linkem " + where + " " + orderby + " LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, start);
 		stmt.setInt(2, pagesize);
 		
 		ResultSet contratti = stmt.executeQuery();
-		//result.replaceAll("\\","");
+		
 		boolean totalRecordsAdded = false;
-		// format returned ResultSet as a JSON array
+		
 		JSONArray recordsArray = new JSONArray();
 		while ( contratti.next()) {
 			JSONObject currentRecord = new JSONObject();
@@ -266,9 +267,11 @@ public class Fastweb_inserimenti extends HttpServlet {
 			currentRecord.put("Indirizzo", contratti.getObject("Indirizzo"));
 			currentRecord.put("CAP", contratti.getObject("CAP"));
 			currentRecord.put("Telefono", contratti.getObject("Telefono"));
+			currentRecord.put("Email", contratti.getObject("Email"));
 			currentRecord.put("Giorno", contratti.getObject("Giorno"));
 			currentRecord.put("Agente", contratti.getObject("Agente"));
 			currentRecord.put("Codice Agente", contratti.getObject("Codice_agente"));
+			
 			if (totalRecordsAdded == false) {
 				// add the number of filtered records to the first record for client-side use
 				currentRecord.put("totalRecords", (totalRecords));
@@ -302,75 +305,82 @@ public class Fastweb_inserimenti extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
+		// Delete, update, activation and insert method for records
 		
-		
-		Calendar calendar = Calendar.getInstance();
-		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-		
-		if (dayOfYear < 90 ) {
-			quarter = "1";
-		}
-		
-		else if (dayOfYear > 90 && dayOfYear < 180) {
-			
-			quarter = "2";
-		}
-		
-		else if (dayOfYear > 180 && dayOfYear <270) {
-			quarter = "3";
-		}
-		
-		else {
-			quarter = "4";
-		}
-		
-		ld = LocalDate.parse(request.getParameter("Data"));
-		
-
-		
-		telefono = request.getParameter("Telefono");
-		indirizzo = request.getParameter("Indirizzo");
-		cap = request.getParameter("Cap");
 		delete = request.getParameter("elimina");
 		account_del = request.getParameter("account_del");
-		account = request.getParameter("account_par");
-		agente = request.getParameter("Agente");
-		tipologia = request.getParameter("Tipologia");
-		nome= request.getParameter("nome_par");
-		cognome = request.getParameter("cognome_par");
-		//quarter = request.getParameter("quarter_par");
-		codice_agente = request.getParameter("codice_agente_par");
-	
-		if(delete != null) {
+		aggiorna_nota = request.getParameter("aggiorna_nota");
+		account_nota= request.getParameter("account_nota");
+		
+	if(delete != null) {
 			
 			try {
 			
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.DELETE (?) }";
+				sql = "{call Ilmar.DeleteLinkem (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_del);
 				cstm2.execute();
 				cstm2.close();
-				response.sendRedirect("grid.html");
+				response.sendRedirect("Linkem.html");
 				writer.close();
 				closeConn();
 			} catch (ClassNotFoundException | SQLException e) {
-				
+				response.sendRedirect("Error.html");
 				e.printStackTrace();
 			}
 			
 		}
-		else {
-		try {
+	
 
+else if (aggiorna_nota != null) {
+	
+	try {
+		
+		writer=response.getWriter();
+		getConn();
+		sql = "{call Ilmar.aggiorna_nota (?, ?) }";
+		cstm2 = conn.prepareCall(sql);
+		cstm2.setString(1, account_nota);
+		cstm2.setString(2, aggiorna_nota);
+		cstm2.execute();
+		cstm2.close();
+		response.sendRedirect("grid.html");
+		writer.close();
+		closeConn();
+	} catch (ClassNotFoundException | SQLException e) {
+		response.sendRedirect("Error.html");
+		e.printStackTrace();
+	}
+	
+}
+		else {
+		
+
+		
+		telefono = request.getParameter("Telefono");
+		indirizzo = request.getParameter("Indirizzo");
+		cap = request.getParameter("Cap");	
+		account = request.getParameter("account_par");
+		agente = request.getParameter("Agente");
+		tipologia = request.getParameter("Tipologia");
+		nome= request.getParameter("nome_par");
+		cognome = request.getParameter("cognome_par");
+		
+		codice_agente = request.getParameter("codice_agente_par");
+		email = request.getParameter("Email");
+	
+	
+		try {
+			ld = LocalDate.parse(request.getParameter("Data"));
 		
 			getConn();
 		
 
 			
 			
-			sql = "{ call select_all}";
+			sql = "{ call SelectLinkem}";
 			cstm = (CallableStatement) conn.prepareCall(sql);
 			
 			cstm.execute();
@@ -382,12 +392,12 @@ public class Fastweb_inserimenti extends HttpServlet {
 				
 				
 					if((rs.getString("Account").equals(account))) {
-						sql2 = "{ call Ilmar.UPDATE (?,?,?,?,?,?,?,?,?,?,?)}";
+						sql2 = "{ call Ilmar.UpdateLinkem (?,?,?,?,?,?,?,?,?,?,?)}";
 						break;
 						 
 			}
 					else{
-						sql2 = "{ call Ilmar.INSERT (?,?,?,?,?,?,?,?,?,?,?)}";
+						sql2 = "{ call Ilmar.InsertLinkem (?,?,?,?,?,?,?,?,?,?, ?)}";
 					}
 				
 			}
@@ -399,48 +409,29 @@ public class Fastweb_inserimenti extends HttpServlet {
 						cstm2.setString(2, nome);
 						cstm2.setString(3, cognome);
 						cstm2.setString(4, tipologia);
-						cstm2.setString(5, agente);
-						cstm2.setString(6, codice_agente);
-						cstm2.setString(7, quarter);
-						cstm2.setString(8, telefono);
-						cstm2.setString(9, indirizzo);
-						cstm2.setString(10, cap);
-						cstm2.setObject (11,ld);
+						cstm2.setString(5, indirizzo);
+						cstm2.setString(6, cap);					
+						cstm2.setString(7, telefono);
+						cstm2.setString(8, agente);
+						cstm2.setString(9, codice_agente);
+						cstm2.setObject (10,ld);
+						cstm2.setObject (11, email);
 						
 						cstm2.execute();
 						cstm2.close();
-						
-						final String state = "Operazione eseguita";
-					   // writer = response.getWriter();
-					   // writer.print(state);
-					    //writer.flush();
-					    //response.setContentType("text/html"); 
-						//RequestDispatcher rd=request.getRequestDispatcher("grid.html");
-						//rd.forward(request, response);
-						response.sendRedirect("grid.html");
+					
+						response.sendRedirect("Linkem.html");
 						//writer.close();
 						closeConn();
-				
-					
-				
 						
-						//rs = cstm.getResultSet();
-					
-						
-						//writer.print(state);
-						
-						
-				
-					
-				
-				
-					
 			}
 		catch (SQLException e) {
+			response.sendRedirect("Error.html");
 			
 			e.printStackTrace();
 		}
 	 catch (ClassNotFoundException e) {
+		 response.sendRedirect("Error.html");
 				
 			}
 		}
@@ -450,34 +441,14 @@ public class Fastweb_inserimenti extends HttpServlet {
 		
 	
 
-	/**
-	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
-	 */
+	
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 	}
 
-	/**
-	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
-	 */
+	
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		account = request.getParameter("account");
-		try {
-			final String state = account;
-			writer=response.getWriter();
-			getConn();
-			sql = "{call Ilmar.DELETE (?) }";
-			cstm2 = conn.prepareCall(sql);
-			cstm2.setString(1, account);
-			cstm2.execute();
-			cstm2.close();
-			writer.print(state);
-			writer.close();
-			closeConn();
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		
 		
 		

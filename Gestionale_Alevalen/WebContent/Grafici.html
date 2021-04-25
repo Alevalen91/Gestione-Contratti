@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <title>Analisi punteggi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -8,29 +8,45 @@
       <link rel = "stylesheet" href="css/Index.css" >
     <link rel = "stylesheet" href="css/footer.css" >
     <link rel = "stylesheet" href="css/header.css" >
+  
    
      <script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
      <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
        <script type="text/javascript" src="jqwidgets/jqxprogressbar.js"></script>
-  
-     <style type="text/css">
-    	.bar-title{
-    	margin-left: -100px;
-    	}
-        .labels {
-            font-size: smaller;
-        }
+        <script src = "js/LoginControl.js"> </script>
+         <script src = "js/GraficiSky.js"> </script>
+          <script src = "js/ProgressBar.js"> </script>
+    	<style>
+    
+   				 html { 
+   				 	visibility:hidden;}
+    
+    			.bar-title{
+    				margin-left: -100px;
+    					   }
+       			.labels {
+           		   font-size: smaller;
+        				}
         
       
-        div{
+       			div{
         
-        margin-top: 20px;
-        }
+        		   margin-top: 20px;
+       				 }
         
-          .border{
-        border-bottom: 1px solid;
-     	border-color: #c2d3f2;
-        }
+         	   .border{
+       				 border-bottom: 1px solid;
+     				 border-color: #c2d3f2;
+       				 }
+       				 
+       		   #resultpercentage {
+    
+    				display:block;
+    
+   					 margin-top: 20px;
+   					 
+    
+   								 }
     </style>
     
     <script type="text/javascript" src="jqwidgets/jqxdata.js"></script>
@@ -40,233 +56,10 @@
     <script type="text/javascript" src="jqwidgets/jqxdropdownlist.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxdraw.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxchart.core.js"></script>
-    <script type="text/javascript">
-       
     
-        
-        $(document).ready(function () {
-            $('#bottone').click(function () {
-            	var quarter = $("#quarter").val();
-            	$.ajax ({
-            		type: 'GET',
-            		data: {quarter: quarter},
-            		url: 'Analisi',
-            		success: function (data){
-            			var punteggi = JSON.parse(data);
-            			
-            			
-            			
-            			//console.log(map2);
-            			
-            		      var source = {
-            	                    datatype: "json",
-            	                    datafields: [{
-            	                        name: 'Agente',
-            	                        type: 'string'
-            	                    }, {
-            	                        name: 'Punteggio',
-            	                        type: 'string'
-            	                    }],
-            	                    
-            	                    localdata: punteggi,
-            	                    
-            	                   // url: 'Analisi',
-            	                    async: true
-            	                };
-            		
-          				console.log(source);
-                      // prepare jqxChart settings
-            			
-            			 var dataAdapter = new $.jqx.dataAdapter(source);
-                         var settings = {
-                             title: "Punteggio agenti",
-                             description: " Quarter",
-                             padding: {
-                                 left: 5,
-                                 top: 5,
-                                 right: 15,
-                                 bottom: 5
-                             },
-                             titlePadding: {
-                                 left: 90,
-                                 top: 0,
-                                 right: 0,
-                                 bottom: 10
-                             },
-                             source: dataAdapter,
-                             xAxis: {
-                                 dataField: 'Agente',
-                                 displayText: 'Agente',
-                                 gridLines: {
-                                	 gridLinesColor: '#aac6fa',
-                                	 gridLinesInterval: 1,
-                                     visible: true
-                                 },
-                                 valuesOnTicks: false,
-                                
-                                 type: 'basic',
-                                 labels: {
-                                     class: 'labels',
-                                     angle: 90,
-                                     formatFunction: function (value) {
-                                         return value.replace(/\?/g, '');
-                                     }
-                                 },
-                                 flip: false
-                             },
-                             colorScheme: 'scheme05',
-                             seriesGroups: [{
-                                 type: 'column',
-                                 columnsGapPercent: 100,
-                                 seriesGapPercent: 0,
-                                 orientation: 'horizontal',
-                                 valueAxis: {
-                                	 gridLinesColor: '#aac6fa',
-                                     minValue: 0,
-                                     unitInterval: 10,
-                                     description: 'Punteggio',
-                                     flip: true
-                                 },
-                                 series: [{
-                                     dataField: 'Punteggio',
-                                     displayText: 'Punteggio'
-                                 }]
-                             }]
-                         };
-                         $('#chartContainer').jqxChart(settings);
-                         $('#chartContainer').jqxChart({backgroundColor:'#DAE7FE'});
-                         $('#chartContainer').jqxChart({borderLineColor: '#aac6fa'});
-                        
-                         
-                         
-                         // Second chart creation
-                         
-                         var settings2 = {
-                                 title: "Punteggio agenti",
-                                 description: "Quarter",
-                                 padding: {
-                                     left: 5,
-                                     top: 5,
-                                     right: 15,
-                                     bottom: 5
-                                 },
-                                 titlePadding: {
-                                     left: 90,
-                                     top: 0,
-                                     right: 0,
-                                     bottom: 10
-                                 },
-                                 source: dataAdapter,
-                                 xAxis: {
-                                     dataField: 'Agente',
-                                     displayText: 'Agente',
-                                     gridLines: {
-                                         visible: true
-                                     },
-                                     valuesOnTicks: false,
-                                     type: 'basic',
-                                     labels: {
-                                         class: 'labels',
-                                         angle: 90,
-                                         formatFunction: function (value) {
-                                             return value.toString().replace(/\?/g, '');
-                                         }
-                                     },
-                                     flip: false
-                                 },
-                                 colorScheme: 'scheme01',
-                                 seriesGroups: [{
-                                     type: 'pie',
-                                     columnsGapPercent: 30,
-                                     seriesGapPercent: 0,
-                                     orientation: 'horizontal',
-                                     valueAxis: {
-                                         minValue: 0,
-                                         unitInterval: 10,
-                                         description: 'Punteggio',
-                                         flip: true
-                                     },
-                                     series: [{
-                                         dataField: 'Punteggio',
-                                         displayText: 'Agente'
-                                     }]
-                                 }]
-                             };
-                         
-                         $('#chartContainer2').jqxChart(settings2);
-                         $('#chartContainer2').jqxChart({backgroundColor:'#DAE7FE'});
-                         $('#chartContainer2').jqxChart({borderLineColor: '#c2d3f2'});
-            			
-            		}
-            		
-            		
-            	});
-            });
-
-            });
-    
-        
-        </script>
-   
      <script type="text/javascript">
-   	var start = 0;
-   	
-     
-        $(document).ready(function () {
-        	var start = 0;
-        	var nameValue = document.getElementById("uniqueID").value;
-
-        	
-        	
-            
-          console.log(start);
-            // Create vertical jqxProgressBar.
-            $("#jqxprogressbar").jqxProgressBar({ orientation: 'vertical', width: 25, height: 250, value: start, theme: 'energyblue' });
-            $('#jqxprogressbar').bind('valuechanged', function (event) {
-                alert("Value: " + event.currentValue);
-            });
-            // Update ProgressBars.
-            $('#button').click(function () {
-            	
-            	$.ajax({ 
-                    type: 'GET', 
-                    url: 'http://localhost:8080/Gestionale_Alevalen/Analisi', 
-                    data: {quarter: $("#quarter").val()}, 
-                    dataType: 'json',
-                    success: function (data) {
-                    
-                    	var obj = data;
-                    	for (var x in obj){
-                    		start = start + obj[x].Punteggio;
-                    		x++;
-                    
-                    		
-                        	
-                    	}
-                    	$('#chartContainer').jqxChart();
-                    	console.log(data);
-                    	console.log(start);
-                    	//console.log(nameValue);
-                    	 $("#jqxprogressbar").jqxProgressBar({ value: ((start/document.getElementById("uniqueID").value)) * 100  });
-                         //  console.log(start);
-                           document.getElementById("resultpercentage").innerHTML = "Punteggio: " + start + "<br> Target: " + document.getElementById("uniqueID").value + " <br>Percentuale completamento: " + ((start/document.getElementById("uniqueID").value) * 100).toFixed([2]) + "%" ; 
-                          // console.log(document.getElementById("uniqueID").value);
-                           console.log((start/document.getElementById("uniqueID").value) );
-                           start = 0;
-                    }
-                });
-            	
-               
-            });
-        });
-    </script>
-    
-    <script>
+   
  
-    
-    </script>
-    
-    <script>
     
     $('#form').on('keyup keypress', function(e) {
     	  var keyCode = e.keyCode || e.which;
@@ -281,13 +74,7 @@
     
     <style>
     
-    #resultpercentage {
-    
-    display:block;
-    
-    margin: 50px;
-    
-    }
+   
     
     </style>
 </head>
@@ -298,6 +85,8 @@
     <img src="images/ilmarlogo.png" width="40" height="40" class="d-inline-block align-bottom" alt="">
 Gestione Ilmar
   </a>
+  
+   <input type = "button" value = "Logout" id = "logout"> 
 </nav>
 
 
@@ -353,12 +142,48 @@ Gestione Ilmar
    	 
    	  <div><h3> Completamento KPI</h3>
    	  <h5> Inserisci il punteggio del tuo target e premi il bottone per visualizzare la percentuale di completamento</h5>
-    <span> <h4 id = "resultpercentage"></h4></span>
+   	  <br> <h6> Ricordati che il target si riferisce a quello selezionato a <a class= "normale_a" href = "#"> inizio pagina!</a></h6>
+    <span> <h6 id = "resultpercentage"></h6></span>
     </div>
     </div> 
    
    </div>
   
+  
+   <!--  Footer  -->
+     <footer id= "footer">
+
+      <div class = "row justify-content-space-around ">
+        <div id = "contatti" class = "col col-md-5 col-lg-5">
+          <h5 class="contatti" > Contatti </h5>
+          <ul>
+          <li class = "mail"> <a href = "mailto: abc@example.com">alessiovalentex@gmail.com</a></li>
+            <li class = "phone"> 3482943264</li>
+            </ul>
+        </div>
+
+        <div id = "sito" class = "col-md-2 col-lg-2">
+         
+        </div>
+
+          <div  class = "col col-md-5 col-lg-5">
+         
+          <div>
+            
+            <ul>
+              <li> <a class="navbar-brand" href="Index.html"> Homepage </a> </li>
+            <li>  <a class="navbar-brand" href="Inserimenti.html"> Inserimenti </a> </li>
+             <li> <a class="navbar-brand" href="Grafici.html"> Analisi Sky </a> </li>
+             <li>  <a class="navbar-brand" href="Gestione_promo.html"> Gestione Promozione Sky </a> </li>
+            <li>  <a class="navbar-brand" href="Collaboratori.html"> Pagina Collaboratori </a> </li>
+             </ul>
+          </div>
+          </div>
+        </div>
+
+
+    </footer>
+     
   
   
 
