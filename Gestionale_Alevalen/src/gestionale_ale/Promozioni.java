@@ -42,7 +42,7 @@ public class Promozioni extends HttpServlet {
 
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
+		conn = DriverManager.getConnection("jdbc:mysql://yourDB","yourUser","YourPassword");
 		return conn;
 	}
 	
@@ -88,7 +88,7 @@ public class Promozioni extends HttpServlet {
 		
 	}
 	else {
-			sql = "{call Ilmar.select_all_promo}";
+			sql = "{call ****.select_all_promo}";
 		
 		try {
 			getConn();
@@ -145,7 +145,7 @@ if(promo_del != null) {
 			
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.delete_promo (?)}";
+				sql = "{call ****.delete_promo (?)}";
 				cstm =  conn.prepareCall(sql);
 				cstm.setString(1, promo_del);
 				cstm.execute();
@@ -168,7 +168,7 @@ if(promo_del != null) {
 
 			
 			
-			sql = "{call Ilmar.select_all_promo}";
+			sql = "{call ****.select_all_promo}";
 			cstm =  conn.prepareCall(sql);
 			
 			cstm.execute();
@@ -181,13 +181,13 @@ if(promo_del != null) {
 				
 				
 					if((rs.getString("Promozione").equals(promo))) {
-						sql2 = "{ call Ilmar.update_promo (?,?)}";
+						sql2 = "{ call ****.update_promo (?,?)}";
 						
 						break;
 						 
 			}
 					else{
-						sql2 = "{ call Ilmar.inserimento_promo (?,?)}";
+						sql2 = "{ call ****.inserimento_promo (?,?)}";
 						
 					}
 				
@@ -221,22 +221,7 @@ if(promo_del != null) {
 	}
 	
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		promo = request.getParameter("Promozione");
-		try {
 		
-			
-			getConn();
-		
-			cstm = (CallableStatement) conn.prepareCall("delete_promo(?)}");
-			cstm.setString(1, promo);
-			cstm.execute();
-			cstm.close();
-		
-			closeConn();
-		} catch (ClassNotFoundException | SQLException e) {
-			response.sendRedirect("Error.html");
-			e.printStackTrace();
-		}
 		
 		
 		
