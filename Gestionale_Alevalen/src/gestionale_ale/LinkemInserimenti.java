@@ -71,7 +71,7 @@ public class LinkemInserimenti extends HttpServlet {
 	
 	private Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://ilmar.crqnoawq1chg.eu-south-1.rds.amazonaws.com:3306/Ilmar","IlmarUser","Ilmar0282135149");
+		conn = DriverManager.getConnection("jdbc:mysql://yourDB","yourUser","YourPassword");
 		return conn;
 	}
 	// Close DB Connection 
@@ -318,7 +318,7 @@ public class LinkemInserimenti extends HttpServlet {
 			
 				writer=response.getWriter();
 				getConn();
-				sql = "{call Ilmar.DeleteLinkem (?) }";
+				sql = "{call ****.DeleteLinkem (?) }";
 				cstm2 = conn.prepareCall(sql);
 				cstm2.setString(1, account_del);
 				cstm2.execute();
@@ -340,7 +340,7 @@ else if (aggiorna_nota != null) {
 		
 		writer=response.getWriter();
 		getConn();
-		sql = "{call Ilmar.aggiorna_nota (?, ?) }";
+		sql = "{call ****.aggiorna_nota (?, ?) }";
 		cstm2 = conn.prepareCall(sql);
 		cstm2.setString(1, account_nota);
 		cstm2.setString(2, aggiorna_nota);
@@ -392,12 +392,12 @@ else if (aggiorna_nota != null) {
 				
 				
 					if((rs.getString("Account").equals(account))) {
-						sql2 = "{ call Ilmar.UpdateLinkem (?,?,?,?,?,?,?,?,?,?,?)}";
+						sql2 = "{ call ****.UpdateLinkem (?,?,?,?,?,?,?,?,?,?,?)}";
 						break;
 						 
 			}
 					else{
-						sql2 = "{ call Ilmar.InsertLinkem (?,?,?,?,?,?,?,?,?,?, ?)}";
+						sql2 = "{ call ****.InsertLinkem (?,?,?,?,?,?,?,?,?,?, ?)}";
 					}
 				
 			}
